@@ -39,7 +39,6 @@ tickets = [
   
 addNotaButton.addEventListener("click", () => {
   addNota();
-  console.log(tickets);
 }
 );
 function addNota() {
