@@ -1,38 +1,15 @@
+let tickets = { push: function push(element) { [].push.call(this, element) } };
+tickets = JSON.parse(window.localStorage.getItem("tickets"));
 
-const tickets = {
-    data: [
-      {
-        tipoIntervento: "Edile",
-        data: "2023-03-17",
-        lavoratore: "Mario Rossi",
-        oreImpiegate: 5,
-        materialiImpiegati: ["cemento", "piastrelle"],
-        completato: true,
-      },
-      {
-        tipoIntervento: "Elettrico",
-        data: "2023-03-18",
-        lavoratore: "Luigi Bianchi",
-        oreImpiegate: 3,
-        materialiImpiegati: ["cavi", "prese"],
-        completato: false,
-      },
-      {
-        tipoIntervento: "Falegname",
-        data: "2023-03-19",
-        lavoratore: "Giovanni Verdi",
-        oreImpiegate: 4,
-        materialiImpiegati: ["legno", "chiodi"],
-        completato: false,
-      },
-    ],
-  };
-
+let username = window.localStorage.getItem("username");
+console.log(username);
   // Seleziona l'elemento DOM in cui vuoi riempire i dati
   const ticketList = document.querySelector("#ticket-list");
 
   // Cicla attraverso l'array di ticket e crea una riga della tabella per ogni ticket
-  tickets.data.forEach((ticket) => {
+  tickets.forEach((ticket) => {
+    console.log(ticket.lavoratore);
+    if (username == ticket.lavoratore||username == "admin"){
     // Crea una nuova riga della tabella
     const tableRow = document.createElement("tr");
 
@@ -48,5 +25,5 @@ const tickets = {
     tableRow.innerHTML = ticketDetails;
 
     // Aggiungi la riga della tabella alla lista di ticket
-    ticketList.appendChild(tableRow);
+    ticketList.appendChild(tableRow);}
   });
