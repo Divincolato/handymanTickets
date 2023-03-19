@@ -33,8 +33,27 @@
 	  <p>Qui potrai gestire i ticket dei clienti e i lavoratori dell'impresa.</p>
 	  <!-- Inserire qui la logica per visualizzare i ticket aperti e assegnare i lavori ai collaboratori -->
 	  <!-- Inserire qui la logica per generare il consuntivo di fine lavori per ogni intervento -->
+	  <div class="container mt-5">
+		<table class="table">
+		  <thead>
+			<tr>
+			  <th scope="col">Tipo di intervento</th>
+			  <th scope="col">Data</th>
+			  <th scope="col">Lavoratore</th>
+			  <th scope="col">Ore impiegate</th>
+			  <th scope="col">Materiali impiegati</th>
+			  <th scope="col">Completato</th>
+			</tr>
+		  </thead>
+		  <tbody id="ticket-list">
+			<!-- Qui verranno inseriti i ticket -->
+		  </tbody>
+		</table>
+	  </div>
+  
 	</div>
 	<!-- Includere qui i link agli script JS di Bootstrap -->
+	<script src="main.js"></script>
 	<!-- Includere qui gli script JS per la logica della pagina admin -->
 </body>
 </html>
