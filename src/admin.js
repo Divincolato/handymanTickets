@@ -11,14 +11,23 @@ let index=0;
     
     // Crea una nuova riga della tabella
     const tableRow = document.createElement("tr");
+    var ticketDetails="";
+    var tipoInterv = [];
+    var oreImpiegate = [];
 
+    ticket.tipoIntervento.forEach((item) => {
+      let entries = Object.entries(item);
+      tipoInterv.push(entries[0][0]);
+      oreImpiegate.push(entries[0][1]);
+    });
     // Aggiungi i dettagli del ticket alla riga della tabella
-    const ticketDetails = `
-      <td id="riga${index}">${ticket.tipoIntervento}</td>
+       ticketDetails+=`<td id="riga${index}">${ticket.cliente}</td><td id="riga${index}">${ticket.indirizzo}</td>`
+     ticketDetails += `<td id="riga${index}">${tipoInterv.join(", ")}</td>
+      <td id="riga${index}">${oreImpiegate.join(", ")}</td>
       <td>${ticket.data}</td>
       <td id="lavoratore${index}">${ticket.lavoratore}</td>
-      <td>${ticket.oreImpiegate}</td>
       <td>${ticket.materialiImpiegati.join(", ")}</td>
+      <td>${ticket.descrizioneIntervento}</td>
       <td id="completato${index}">${ticket.completato ? "Si" : "No"}</td>
       <input type="button" id="edit_button${index}" value="Edit" class="edit" onclick="edit_row('${index}')">
       <input type="button" id="save_button${index}" style="display:none" value="Save" class="save" onclick="save_row('${index}')">
@@ -53,12 +62,15 @@ if(lavoratore.innerHTML=="Luigi")
 {lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi" selected>Luigi</option><option value="Giovanni">Giovanni</option>';
 }else 
 if(lavoratore.innerHTML=="Giovanni"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';
+}else{lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" >Giovanni</option>';
 }
 }
 
 function save_row(no)
-{
- var lavoratore_val=document.getElementById("lavoratore_text"+no).value;
+{ var lavoratore_val="";
+  if (document.getElementById("lavoratore_text"+no).value==null){
+    lavoratore_val="Mario";}
+    else{ lavoratore_val=document.getElementById("lavoratore_text"+no).value;}
 
  var completato=document.getElementById("completato"+no);
  if(document.getElementById('completato_text_si'+no).checked) {

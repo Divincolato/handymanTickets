@@ -1,46 +1,57 @@
 
 let tickets = { push: function push(element) { [].push.call(this, element) } };
+//dati preimpostati per metter qualcosa in localStorage
 tickets = [
-      {
-        tipoIntervento: [{"Edile":5},{"Elettrico":3}],
-        descrizioneIntervento: "",
-        indirizzo:"",
+      { cliente: "Gigio",
+        tipoIntervento: [{"Edile":5},{"Elettrico":3},{"Idraulico":3},{"Serramenti":3}],
+        descrizioneIntervento: "eretgs est erstg rst sets et",
+        indirizzo:"wudnuwdnuwdn via v 3343",
         data: "2023-03-17",
         lavoratore: "Mario",
-        oreImpiegate: 5,
         materialiImpiegati: ["cemento", "piastrelle"],
         completato: true
       },
-      {
-        tipoIntervento: "Elettrico",
-        descrizioneIntervento: "",
-        indirizzo:"",
+      {cliente: "Gigio",
+        tipoIntervento: [{"Edile":5},{"Elettrico":3}],
+        descrizioneIntervento: "eretgs est erstg rst sets et",
+        indirizzo:"wudnuwdnuwdn via v 3343",
         data: "2023-03-18",
         lavoratore: "Luigi",
-        oreImpiegate: 3,
         materialiImpiegati: ["cavi", "prese"],
         completato: false
       },
-      {
-        tipoIntervento: "Falegname",
-        descrizioneIntervento: "",
-        indirizzo:"",
+      {cliente: "Gigio",
+        tipoIntervento: [{"Edile":5},{"Elettrico":3}],
+        descrizioneIntervento: "eretgs est erstg rst sets et",
+        indirizzo:"wudnuwdnuwdn via v 3343",
         data: "2023-03-19",
         lavoratore: "Mario",
-        oreImpiegate: 4,
         materialiImpiegati: ["legno", "chiodi"],
         completato: false
       }]
   ;
   
+//elementi del dom 
   let addNotaButton = document.getElementById("add-nota");
   
   let richiestaForm = document.getElementById("richiesta-form");
-  
-addNotaButton.addEventListener("click", () => {
-  addNota();
-}
-);
+
+  let caricaDatiDefault = document.getElementById("caricaDatiDefault");
+
+//eventListeners
+  addNotaButton.addEventListener("click", () => {
+      addNota();
+    }
+  );
+  caricaDatiDefault.addEventListener("click", () => {
+      window.localStorage.setItem("tickets", JSON.stringify(tickets));
+      window.alert("Dati caricati");
+      console.log(tickets);
+    }
+  );
+
+//Funzione addNota() crea una nota vuota, popolandola con i dati inseriti da un cliente 
+//per poi inserirla nei tickets ed inviando a localStorage l'array
 function addNota() {
   let tmp = {
         tipoIntervento: [],
@@ -52,7 +63,8 @@ function addNota() {
         materialiImpiegati: [],
         completato: false,
   };
-  //ciclo per inserire solo checkbox flaggate e ore
+  //serie di if per checkbox, popola tipoIntervento
+  //TODO rifare con ciclo o HOfunc per non avere mille if
   if(richiestaForm.Edile.checked){
     tmp.tipoIntervento.push({"Edile":0});
   }
@@ -77,13 +89,21 @@ function addNota() {
   if(richiestaForm.Altro.checked){
     tmp.tipoIntervento.push({"Altro":0});
   }
+
+  //dati rimanenti inseriti dall'utente
   tmp.descrizioneIntervento = richiestaForm.descrizioneIntervento.value
+
   tmp.indirizzo = richiestaForm.Indirizzo.value
+
   tmp.data = richiestaForm.data.value
+  //inserimento in tickets locale
   tickets.push(tmp);
+  //push allo storage
   window.localStorage.setItem("tickets", JSON.stringify(tickets));
 }
 
+//funzione che non fa fare il submit alla form, da anche l'alert
+//TODO inserire error check per verificare veramente il submit dei dati
 function mySubmitFunction(e) {
     e.preventDefault();
     window.alert("Richiesta Inoltrata, verrai contattato il prima possibile.")
