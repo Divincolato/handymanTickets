@@ -2,7 +2,7 @@
 let tickets = { push: function push(element) { [].push.call(this, element) } };
 tickets = [
       {
-        tipoIntervento: "Edile",
+        tipoIntervento: [{"Edile":5},{"Elettrico":3}],
         descrizioneIntervento: "",
         indirizzo:"",
         data: "2023-03-17",
@@ -43,7 +43,7 @@ addNotaButton.addEventListener("click", () => {
 );
 function addNota() {
   let tmp = {
-        tipoIntervento: "",
+        tipoIntervento: [],
         descrizioneIntervento: "",
         indirizzo:"",
         data: "",
@@ -52,7 +52,31 @@ function addNota() {
         materialiImpiegati: [],
         completato: false,
   };
-  tmp.tipoIntervento = richiestaForm.tipoIntervento.value
+  //ciclo per inserire solo checkbox flaggate e ore
+  if(richiestaForm.Edile.checked){
+    tmp.tipoIntervento.push({"Edile":0});
+  }
+  if(richiestaForm.Elettrico.checked){
+    tmp.tipoIntervento.push({"Elettrico":0});
+  }
+  if(richiestaForm.Falegname.checked){
+    tmp.tipoIntervento.push({"Falegname":0});
+  }
+  if(richiestaForm.Idraulico.checked){
+    tmp.tipoIntervento.push({"Idraulico":0});
+  }
+  if(richiestaForm.Serramenti.checked){
+    tmp.tipoIntervento.push({"Serramenti":0});
+  }
+  if(richiestaForm.Tinteggiatura.checked){
+    tmp.tipoIntervento.push({"Tinteggiatura":0});
+  }
+  if(richiestaForm.Facchinaggio.checked){
+    tmp.tipoIntervento.push({"Facchinaggio":0});
+  }
+  if(richiestaForm.Altro.checked){
+    tmp.tipoIntervento.push({"Altro":0});
+  }
   tmp.descrizioneIntervento = richiestaForm.descrizioneIntervento.value
   tmp.indirizzo = richiestaForm.Indirizzo.value
   tmp.data = richiestaForm.data.value

@@ -32,7 +32,7 @@ let index=0;
   }
   );
 
-
+console.log(tickets);
     function edit_row(no)
 {
  document.getElementById("edit_button"+no).style.display="none";
