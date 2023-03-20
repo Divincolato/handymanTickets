@@ -59,7 +59,6 @@ function addNota() {
         indirizzo:"",
         data: "",
         lavoratore: "",
-        oreImpiegate: 0,
         materialiImpiegati: [],
         completato: false,
   };
