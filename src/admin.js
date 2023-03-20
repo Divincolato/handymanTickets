@@ -44,17 +44,32 @@ let index=0;
  var completato_data=completato.innerHTML;
  var lavoratore_data=lavoratore.innerHTML;
 	
- completato.innerHTML="<input type='text' id='completato_text"+no+"' value='"+completato_data+"'>";
- lavoratore.innerHTML="<input type='text' id='lavoratore_text"+no+"' value='"+lavoratore_data+"'>";
+ completato.innerHTML='<input type="radio" id="completato_text_si'+no+'"  value="Si">  <label for="Si">Si</label>  <input type="radio" id="completato_text_no'+no+'"  value="No">  <label for="No">No</label>'
+ 
+ if(lavoratore.innerHTML=="Mario")
+ {lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario" selected>Mario</option><option value="Luigi">Luigi</option><option value="Giovanni">Giovanni</option>';
+}else 
+if(lavoratore.innerHTML=="Luigi")
+{lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi" selected>Luigi</option><option value="Giovanni">Giovanni</option>';
+}else 
+if(lavoratore.innerHTML=="Giovanni"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';
+}
 }
 
 function save_row(no)
 {
- var completato_val=document.getElementById("completato_text"+no).value;
  var lavoratore_val=document.getElementById("lavoratore_text"+no).value;
 
- document.getElementById("completato"+no).innerHTML=completato_val;
- tickets[no].completato=completato_val;
+ var completato=document.getElementById("completato"+no);
+ if(document.getElementById('completato_text_si'+no).checked) {
+      tickets[no].completato=true;
+      completato.innerHTML="Si";
+      
+    }else if(document.getElementById('completato_text_no'+no).checked) {
+      tickets[no].completato=false;
+      completato.innerHTML="No";
+  }
+
  document.getElementById("lavoratore"+no).innerHTML=lavoratore_val;
  tickets[no].lavoratore=lavoratore_val;
  
