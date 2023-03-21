@@ -23,7 +23,6 @@ tickets.forEach((ticket) => {
     <li class="list-group-item">Nome: ${ticket.nome} ${ticket.cognome}</li>
     <li class="list-group-item">Indirizzo: ${ticket.indirizzo}</li>
     <li class="list-group-item">Contatti: ${ticket.contatti}</li>
-    <li class="list-group-item">Descrizione: ${ticket.descrizioneIntervento}</li>
     <input style="border-style: solid;" type="button" id="bottone${index}" value="Edit"  onclick="edit_row('${index}')"></input>
     <li class="list-group-item" id="completato${index}">Completato: ${ticket.completato ? "Si" : "No"}</li>
     <li class="list-group-item"id="lavoratore${index}">Lavoratore: ${ticket.lavoratore}</li>
@@ -38,7 +37,7 @@ tickets.forEach((ticket) => {
             <th>Ore</th>
             <th>Data Svolto</th>
             <th>Materiali Usati</th>
-            <th>Commenti</th>
+            <th>Commenti Dipendente</th>
           </tr>
           </thead>
           <tbody>`;
@@ -57,24 +56,12 @@ tickets.forEach((ticket) => {
   ticketDetails+=`
           
           </tbody>
-        </table>  
+        </table> <div>
+        <p class="list-group-item">Descrizione cliente: ${ticket.descrizioneIntervento}</p></div> 
 		  </div>
 		</div><br>`;
 
-  /*
-    // Aggiungi i dettagli del ticket alla riga della tabella
-      ticketDetails +=`      <tr>
-      <td >${ticket.nome}</td></tr><tr>
-      <td >${ticket.cognome}</td></tr><tr>
-      <td >${ticket.indirizzo}</td></tr><tr>
-      <td >${ticket.contatti}</td></tr><tr>
-      <td >${ticket.descrizioneIntervento}</td></tr><tr>
-      <td id="lavoratore${index}">${ticket.lavoratore}</td></tr><tr>
-      <td id="completato${index}">${ticket.completato ? "Si" : "No"}</td></tr><tr>
-      <td id="bottone${index}"><input type="button" id="edit_button${index}" value="Edit" class="edit" onclick="edit_row('${index}')"></td>
-      <td ><input type="button" id="save_button${index}" style="display:none" value="Save" class="save" onclick="save_row('${index}')"></td>
-      </tr>
-    `;*/
+
 
     tableRow.innerHTML = ticketDetails;
     // Aggiungi la riga della tabella alla lista di ticket
@@ -86,7 +73,6 @@ tickets.forEach((ticket) => {
     function edit_row(no)
 {
   //cambio il button a "save"
- //document.getElementById("bottone"+no).innerHTML='<input type="button" id="edit_button'+no+'" style="display:block" value="Save" class="save" onclick="save_row('+no+')"></input>';
  document.getElementById("bottone"+no).setAttribute( "onClick", "save_row("+no+");" );
  document.getElementById("bottone"+no).value= `Save`;
 
@@ -98,23 +84,26 @@ tickets.forEach((ticket) => {
  }
  else{
   completato.innerHTML='<select class="form-control" id="completato_text'+no+'"><option value="true" >Si</option><option value="false" selected> No</option>';}
-//preseleziona il lavoratore presente quando si edita in modo da lasciare lo stesso se non modificato
- if(lavoratore.innerHTML=="Lavoratore: Mario"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario" selected>Mario</option><option value="Luigi">Luigi</option><option value="Giovanni">Giovanni</option>';}
-  else if(lavoratore.innerHTML=="Lavoratore: Luigi"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi" selected>Luigi</option><option value="Giovanni">Giovanni</option>';}
-  else if(lavoratore.innerHTML=="Lavoratore: Giovanni"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';}
-  else{lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" >Giovanni</option>';
+
+  //preseleziona il lavoratore presente quando si edita in modo da lasciare lo stesso se non modificato
+ if(tickets[no].lavoratore==="Mario"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare">Da Assegnare</option><option value="Mario" selected>Mario</option><option value="Luigi">Luigi</option><option value="Giovanni">Giovanni</option>';}
+  else if(tickets[no].lavoratore=="Luigi"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare">Da Assegnare</option><option value="Mario">Mario</option><option value="Luigi" selected>Luigi</option><option value="Giovanni">Giovanni</option>';}
+  else if(tickets[no].lavoratore=="Giovanni"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare">Da Assegnare</option><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';}
+  else if(tickets[no].lavoratore==""){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare">Da Assegnare</option><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';}
+  else{lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare" selected>Da Assegnare</option><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" >Giovanni</option>';
  }
 }
 
 function save_row(no)
-{ var lavoratore_val="";
+{ //prendo valori selezionati 
+  var lavoratore_val="";
   if (document.getElementById("lavoratore_text"+no).value==null){
-    lavoratore_val="Lavoratore: Mario";}
-    else{ lavoratore_val="Lavoratore: "+document.getElementById("lavoratore_text"+no).value;}
+    lavoratore_val="Da Assegnare";}
+    else{ lavoratore_val=document.getElementById("lavoratore_text"+no).value;}
 
  var completato=document.getElementById("completato"+no);
 
-
+//li ritorno all'array e al dom
  if(document.getElementById('completato_text'+no).value=="true") {
       tickets[no].completato=true;
       completato.innerHTML="Completato: Si";
@@ -124,9 +113,9 @@ function save_row(no)
       completato.innerHTML="Completato: No";
   }
 
- document.getElementById("lavoratore"+no).innerHTML=lavoratore_val;
+ document.getElementById("lavoratore"+no).innerHTML="Lavoratore: "+lavoratore_val;
  tickets[no].lavoratore=lavoratore_val;
- 
+ //salvo modificne in array
  window.localStorage.setItem("tickets", JSON.stringify(tickets));
 
  //faccio tornare il button a "edit" 

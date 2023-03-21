@@ -3,35 +3,40 @@ let tickets = { push: function push(element) { [].push.call(this, element) } };
 //dati preimpostati per metter qualcosa in localStorage
 tickets = [
   {
-  nome: "mario",
-  cognome: "rossi",
-  indirizzo: "via iave 9",
+  nome: "Germano",
+  cognome: "Parvetti",
+  indirizzo: "via Pave 9, Trento(TN)",
   descrizioneIntervento: "Cambiare infissi",
   contatti:"333-6658452",
   interventi:[{
-      categoria:"Pittura", ore: 3, dataSvolto:"", materialiUsati:"",commentiIntervento:""
+      categoria:"Pittura", ore: 3, dataSvolto:"2023-04-25", materialiUsati:"Pennelli",commentiIntervento:"Tutto ok"
     },{
-      categoria:"Falegnameria", ore: 2, dataSvolto:"", materialiUsati:"",commentiIntervento:""
+      categoria:"Falegnameria", ore: 2, dataSvolto:"2023-03-12", materialiUsati:"Legno",commentiIntervento:"Tutto ok"
     },{
-      categoria:"Elettrodomestici", ore: 5, dataSvolto:"", materialiUsati:"",commentiIntervento:""
+      categoria:"Elettrodomestici", ore: 5, dataSvolto:"2022-9-9", materialiUsati:"Microonde",commentiIntervento:"Tutto ok"
     }],
-    lavoratore: "Mario",
+    lavoratore: "Da Assegnare",
     completato: true
   },
   {
-  nome: "mario",
-  cognome: "rossi",
-  indirizzo: "via iave 9",
-  descrizioneIntervento: "Cambiare infissi",
-  contatti:"333-6658452",
+  nome: "Paolo",
+  cognome: "Bassi",
+  indirizzo: "via Bettini 29, Rovereto(CA)",
+  descrizioneIntervento: "Pittura soffitti, Cambio prese",
+  contatti:"333-6653432",
   interventi:[{
-      categoria:"Pittura", ore: 3, dataSvolto:"", materialiUsati:"",commentiIntervento:""
-    },{
-      categoria:"Falegnameria", ore: 2, dataSvolto:"", materialiUsati:"",commentiIntervento:""
-    },{
-      categoria:"Elettrodomestici", ore: 5, dataSvolto:"", materialiUsati:"",commentiIntervento:""
-    }],
-    lavoratore: "Mario",
+    categoria:"Pittura", ore: 3, dataSvolto:"2023-04-25", materialiUsati:"Pennelli",commentiIntervento:"Tutto ok"
+  },{
+    categoria:"Falegnameria", ore: 2, dataSvolto:"2023-03-12", materialiUsati:"Legno",commentiIntervento:"Tutto ok"
+  },{
+    categoria:"Elettrodomestici", ore: 5, dataSvolto:"2022-9-9", materialiUsati:"Microonde",commentiIntervento:"Tutto ok"
+  },{  categoria:"Pittura", ore: 3, dataSvolto:"2023-04-25", materialiUsati:"Pennelli",commentiIntervento:"Tutto ok"
+},{
+  categoria:"Falegnameria", ore: 2, dataSvolto:"2023-03-12", materialiUsati:"Legno",commentiIntervento:"Tutto ok"
+},{
+  categoria:"Elettrodomestici", ore: 5, dataSvolto:"2022-9-9", materialiUsati:"Microonde",commentiIntervento:"Tutto ok"
+}],
+    lavoratore: "Luigi",
     completato: false
   }
   
