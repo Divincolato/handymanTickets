@@ -20,12 +20,15 @@ tickets.forEach((ticket) => {
     <div class="row">
   <div class="col-md-3">
   <ul class="list-group">
+    <li class="list-group-item"><input  type="button" id="bottone${index}" value="Edit" class="edit" onclick="edit_row('${index}')"></input></li>
     <li class="list-group-item">Nome: ${ticket.nome} ${ticket.cognome}</li>
     <li class="list-group-item">Indirizzo: ${ticket.indirizzo}</li>
     <li class="list-group-item">Contatti: ${ticket.contatti}</li>
     <li class="list-group-item">Descrizione: ${ticket.descrizioneIntervento}</li>
-    <li class="list-group-item"> .</li>
-  </ul>
+    <li class="list-group-item" id="completato${index}">Completato: ${ticket.completato ? "Si" : "No"}</li>
+    <li class="list-group-item"id="lavoratore${index}">Lavoratore: ${ticket.lavoratore}</li>
+    
+    </ul>
 </div>
 		  <div class="col-md-9">
         <table class="table">
@@ -48,7 +51,7 @@ tickets.forEach((ticket) => {
             <td>Riga 2, colonna 3</td>
           </tr>
           </tbody>
-        </table>
+        </table>  
 		  </div>
 		</div>`;
 
@@ -78,7 +81,9 @@ tickets.forEach((ticket) => {
     function edit_row(no)
 {
   //cambio il button a "save"
- document.getElementById("bottone"+no).innerHTML='<input type="button" id="edit_button'+no+'" style="display:block" value="Save" class="save" onclick="save_row('+no+')"></input>';
+ //document.getElementById("bottone"+no).innerHTML='<input type="button" id="edit_button'+no+'" style="display:block" value="Save" class="save" onclick="save_row('+no+')"></input>';
+ document.getElementById("bottone"+no).setAttribute( "onClick", "save_row("+no+");" );
+ document.getElementById("bottone"+no).value= `Save`;
 
  var completato=document.getElementById("completato"+no);
  var lavoratore=document.getElementById("lavoratore"+no);
@@ -119,6 +124,8 @@ function save_row(no)
  
  window.localStorage.setItem("tickets", JSON.stringify(tickets));
 
- //faccio tornare il button a "edit"
+ //faccio tornare il button a "edit" 
+ document.getElementById("bottone"+no).setAttribute( "onClick", "edit_row("+no+");" );
+ document.getElementById("bottone"+no).value= `Edit`;
  document.getElementById("bottone"+no).innerHTML='<input type="button" id="edit_button'+no+'" value="Edit" class="edit" onclick="edit_row('+no+')"></input>';
 }
