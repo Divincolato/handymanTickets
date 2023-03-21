@@ -26,6 +26,7 @@ tickets.forEach((ticket) => {
     <input style="border-style: solid;" type="button" id="bottone${index}" value="Edit"  onclick="edit_row('${index}')"></input>
     <li class="list-group-item" id="completato${index}">Completato: ${ticket.completato ? "Si" : "No"}</li>
     <li class="list-group-item"id="lavoratore${index}">Lavoratore: ${ticket.lavoratore}</li>
+    <li class="list-group-item"id="costoTotale${index}">Costo Totale: ${getTicketCost(ticket)} $ </li>
     
     </ul>
 </div>
@@ -35,6 +36,7 @@ tickets.forEach((ticket) => {
           <tr>
             <th>Categoria</th>
             <th>Ore</th>
+            <th>Costo</th>
             <th>Data Svolto</th>
             <th>Materiali Usati</th>
             <th>Commenti Dipendente</th>
@@ -43,13 +45,16 @@ tickets.forEach((ticket) => {
           <tbody>`;
 
   ticket.interventi.forEach((intervento) =>{
+    
     ticketDetails+= `
     <tr>
     <td>${intervento.categoria}</td>
     <td>${intervento.ore}</td>
+    <td>${getInterventionPrice(intervento)}$</td>
     <td>${intervento.dataSvolto}</td>
     <td>${intervento.materialiUsati}</td>
     <td>${intervento.commentiIntervento}</td>
+    
   </tr>`
   });
 
@@ -123,3 +128,28 @@ function save_row(no)
  document.getElementById("bottone"+no).value= `Edit`;
  document.getElementById("bottone"+no).innerHTML='<input type="button" id="edit_button'+no+'" value="Edit" class="edit" onclick="edit_row('+no+')"></input>';
 }
+function getTicketCost(ticket) {
+  //prendo il prezzo di ogni intervento in un ticket con map chiamando getInterventionPrice() e riduco l'array ritornato per avere il costo totale
+  return ticket.interventi.map((intervento) => getInterventionPrice(intervento)).reduce((acc, cur) => acc + cur, 0);
+}
+// Calculate cost of interventions
+
+function getInterventionPrice(intervento)  {
+  const handymanServiceCall = 250; // includes first two hours + service call
+  const additionalTime = 55; // per half hour
+  const interiorPainting = 90; // per hour
+  let cost=0;
+  // Calculate cost of each intervento
+  
+    let rate;
+    if(intervento.categoria=="Pittura"){rate=interiorPainting;}
+    else if(intervento.ore==0){return 0;}
+    else if(intervento.ore<=2){return 250;}
+    else{rate = additionalTime;}
+    
+    cost = handymanServiceCall + rate * (intervento.ore - 2);
+    
+    return cost;
+}
+
+

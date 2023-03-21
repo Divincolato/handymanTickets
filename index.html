@@ -11,14 +11,13 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	  <a class="navbar-brand" href="#">Nome impresa</a>
+	  <a class="navbar-brand" href="./index.html">Nome impresa</a>
 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
 	  </button>
 	  <div class="collapse navbar-collapse" id="navbarNav">
 	    <ul class="navbar-nav">
-	      <li class="nav-item active">
-	        <a class="nav-link" href="#">Richiesta intervento</a>
+	      <li class="nav-item active"><button id="caricaDatiDefault" class="btn btn-primary">caricaDatiDefault</button>
 	      </li>
 	    </ul>
 	  </div>
@@ -31,7 +30,7 @@
 	  </div>
 	</nav>
 	<div class="container mt-5">
-		<button id="caricaDatiDefault" class="btn btn-primary">caricaDatiDefault</button>
+		
 	  <h1>Richiesta intervento</h1>
 	  <p>Compila il form sottostante per richiedere un intervento alla nostra impresa.</p>
 	  <form id="richiesta-form" onsubmit="return mySubmitFunction(event)">
