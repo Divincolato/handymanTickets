@@ -17,43 +17,49 @@ tickets.forEach((ticket) => {
     // Crea una nuova riga della tabella
     const tableRow = document.createElement("div");
     var ticketDetails=`
-    <div class="row">
-  <div class="col-md-3">
+    <div class="row" style="border-style: solid; ">
+  <div class="col-md-3"style="padding:15px">
   <ul class="list-group">
-    <li class="list-group-item"><input  type="button" id="bottone${index}" value="Edit" class="edit" onclick="edit_row('${index}')"></input></li>
     <li class="list-group-item">Nome: ${ticket.nome} ${ticket.cognome}</li>
     <li class="list-group-item">Indirizzo: ${ticket.indirizzo}</li>
     <li class="list-group-item">Contatti: ${ticket.contatti}</li>
     <li class="list-group-item">Descrizione: ${ticket.descrizioneIntervento}</li>
+    <input style="border-style: solid;" type="button" id="bottone${index}" value="Edit"  onclick="edit_row('${index}')"></input>
     <li class="list-group-item" id="completato${index}">Completato: ${ticket.completato ? "Si" : "No"}</li>
     <li class="list-group-item"id="lavoratore${index}">Lavoratore: ${ticket.lavoratore}</li>
     
     </ul>
 </div>
-		  <div class="col-md-9">
+		  <div class="col-md-9"style="padding:15px">
         <table class="table">
           <thead>
           <tr>
-            <th>Colonna 1</th>
-            <th>Colonna 2</th>
-            <th>Colonna 3</th>
+            <th>Categoria</th>
+            <th>Ore</th>
+            <th>Data Svolto</th>
+            <th>Materiali Usati</th>
+            <th>Commenti</th>
           </tr>
           </thead>
-          <tbody>
-          <tr>
-            <td>Riga 1, colonna 1</td>
-            <td>Riga 1, colonna 2</td>
-            <td>Riga 1, colonna 3</td>
-          </tr>
-          <tr>
-            <td>Riga 2, colonna 1</td>
-            <td>Riga 2, colonna 2</td>
-            <td>Riga 2, colonna 3</td>
-          </tr>
+          <tbody>`;
+
+  ticket.interventi.forEach((intervento) =>{
+    ticketDetails+= `
+    <tr>
+    <td>${intervento.categoria}</td>
+    <td>${intervento.ore}</td>
+    <td>${intervento.dataSvolto}</td>
+    <td>${intervento.materialiUsati}</td>
+    <td>${intervento.commentiIntervento}</td>
+  </tr>`
+  });
+
+  ticketDetails+=`
+          
           </tbody>
         </table>  
 		  </div>
-		</div>`;
+		</div><br>`;
 
   /*
     // Aggiungi i dettagli del ticket alla riga della tabella
@@ -71,7 +77,6 @@ tickets.forEach((ticket) => {
     `;*/
 
     tableRow.innerHTML = ticketDetails;
-    console.log(tableRow.innerHTML)
     // Aggiungi la riga della tabella alla lista di ticket
     ticketList.appendChild(tableRow);
     index++;
@@ -88,15 +93,15 @@ tickets.forEach((ticket) => {
  var completato=document.getElementById("completato"+no);
  var lavoratore=document.getElementById("lavoratore"+no);
 	
- if(completato.innerHTML=="Si"){
+ if(completato.innerHTML=="Completato: Si"){
   completato.innerHTML='<select class="form-control" id="completato_text'+no+'"><option value="true" selected>Si</option><option value="false"> No</option>';
  }
  else{
   completato.innerHTML='<select class="form-control" id="completato_text'+no+'"><option value="true" >Si</option><option value="false" selected> No</option>';}
 //preseleziona il lavoratore presente quando si edita in modo da lasciare lo stesso se non modificato
- if(lavoratore.innerHTML=="Mario"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario" selected>Mario</option><option value="Luigi">Luigi</option><option value="Giovanni">Giovanni</option>';}
-  else if(lavoratore.innerHTML=="Luigi"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi" selected>Luigi</option><option value="Giovanni">Giovanni</option>';}
-  else if(lavoratore.innerHTML=="Giovanni"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';}
+ if(lavoratore.innerHTML=="Lavoratore: Mario"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario" selected>Mario</option><option value="Luigi">Luigi</option><option value="Giovanni">Giovanni</option>';}
+  else if(lavoratore.innerHTML=="Lavoratore: Luigi"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi" selected>Luigi</option><option value="Giovanni">Giovanni</option>';}
+  else if(lavoratore.innerHTML=="Lavoratore: Giovanni"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';}
   else{lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" >Giovanni</option>';
  }
 }
@@ -104,19 +109,19 @@ tickets.forEach((ticket) => {
 function save_row(no)
 { var lavoratore_val="";
   if (document.getElementById("lavoratore_text"+no).value==null){
-    lavoratore_val="Mario";}
-    else{ lavoratore_val=document.getElementById("lavoratore_text"+no).value;}
+    lavoratore_val="Lavoratore: Mario";}
+    else{ lavoratore_val="Lavoratore: "+document.getElementById("lavoratore_text"+no).value;}
 
  var completato=document.getElementById("completato"+no);
 
 
  if(document.getElementById('completato_text'+no).value=="true") {
       tickets[no].completato=true;
-      completato.innerHTML="Si";
+      completato.innerHTML="Completato: Si";
       
     }else {
       tickets[no].completato=false;
-      completato.innerHTML="No";
+      completato.innerHTML="Completato: No";
   }
 
  document.getElementById("lavoratore"+no).innerHTML=lavoratore_val;
