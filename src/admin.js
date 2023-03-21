@@ -18,25 +18,16 @@ tickets.forEach((ticket) => {
     const tableRow = document.createElement("div");
     var ticketDetails=`
     <div class="row">
-    <div class="col-md-2">
-    <ul class="list-group">
-      <li class="list-group-item">Nome</li>
-      <li class="list-group-item">Cognome</li>
-      <li class="list-group-item">Indirizzo</li>
-      <li class="list-group-item">Contatti</li>
-      <li class="list-group-item">Descrizione</li>
-    </ul>
-  </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
   <ul class="list-group">
-    <li class="list-group-item">${ticket.nome}</li>
-    <li class="list-group-item">${ticket.cognome}</li>
-    <li class="list-group-item">${ticket.indirizzo}</li>
-    <li class="list-group-item">${ticket.contatti}</li>
-    <li class="list-group-item">${ticket.descrizioneIntervento}</li>
+    <li class="list-group-item">Nome: ${ticket.nome} ${ticket.cognome}</li>
+    <li class="list-group-item">Indirizzo: ${ticket.indirizzo}</li>
+    <li class="list-group-item">Contatti: ${ticket.contatti}</li>
+    <li class="list-group-item">Descrizione: ${ticket.descrizioneIntervento}</li>
+    <li class="list-group-item"> .</li>
   </ul>
 </div>
-		  <div class="col-md-6">
+		  <div class="col-md-9">
         <table class="table">
           <thead>
           <tr>
