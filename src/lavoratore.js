@@ -5,6 +5,7 @@ let username = window.localStorage.getItem("username");
   // Seleziona l'elemento DOM in cui vuoi riempire i dati
   const ticketList = document.querySelector("#ticket-list");
 let index=0;
+let indexInterventi=0;
   // Cicla attraverso l'array di ticket e crea una riga della tabella per ogni ticket
   tickets.forEach((ticket) => {
     if (username == ticket.lavoratore||username == "admin"){
@@ -16,9 +17,9 @@ let index=0;
           const tableRow = document.createElement("div");
           var ticketDetails=`
           <div class="row" style="border-style: solid; ">
-        <div class="col-md-3"style="padding:15px">
+        <div class="col-md-3"style="padding:15px; border-right:solid; ">
         <ul class="list-group">
-          <input style="border-style: solid;" type="button" id="bottone${index}" value="Edit"  onclick="edit_row('${index}')"></input>
+          
           <li class="list-group-item">Nome: ${ticket.nome} ${ticket.cognome}</li>
           <li class="list-group-item">Indirizzo: ${ticket.indirizzo}</li>
           <li class="list-group-item">Contatti: ${ticket.contatti}</li>
@@ -31,24 +32,27 @@ let index=0;
               <table class="table">
                 <thead>
                 <tr>
-                  <th>Categoria</th>
+                  <th>Categoria</th><th></th>
                   <th>Ore</th>
-                  <th>Data Svolto</th>
+                  <th>Data Intervento</th>
                   <th>Materiali Usati</th>
                   <th>Commenti Dipendente</th>
                 </tr>
                 </thead>
                 <tbody>`;
-      
+        indexInterventi=0;
+
         ticket.interventi.forEach((intervento) =>{
           ticketDetails+= `
           <tr>
-          <td>${intervento.categoria}</td>
-          <td>${intervento.ore}</td>
-          <td>${intervento.dataSvolto}</td>
-          <td>${intervento.materialiUsati}</td>
-          <td>${intervento.commentiIntervento}</td>
+          <td >${intervento.categoria}</td>
+          <td><input style="border-style: solid;" type="button" id="bottone${indexInterventi}" value="Edit"  onclick="edit_row(${indexInterventi}, ${index})"></input></td>
+          <td id="ore${indexInterventi}">${intervento.ore}</td>
+          <td id="dataSvolto${indexInterventi}">${intervento.dataSvolto}</td>
+          <td id="materialiUsati${indexInterventi}">${intervento.materialiUsati}</td>
+          <td id="commentiIntervento${indexInterventi}">${intervento.commentiIntervento}</td>
         </tr>`
+        indexInterventi++;
         });
       
         ticketDetails+=`
@@ -68,56 +72,58 @@ let index=0;
         }index++;
       });
       
-          function edit_row(no)
+          function edit_row(no, no2)
       {
         //cambio il button a "save"
-       document.getElementById("bottone"+no).setAttribute( "onClick", "save_row("+no+");" );
+       document.getElementById("bottone"+no).setAttribute( "onClick", "save_row("+no+", "+no2+");" );
        document.getElementById("bottone"+no).value= `Save`;
-      
-       var completato=document.getElementById("completato"+no);
-       var lavoratore=document.getElementById("lavoratore"+no);
         
-       if(completato.innerHTML=="Completato: Si"){
-        completato.innerHTML='<select class="form-control" id="completato_text'+no+'"><option value="true" selected>Si</option><option value="false"> No</option>';
-       }
-       else{
-        completato.innerHTML='<select class="form-control" id="completato_text'+no+'"><option value="true" >Si</option><option value="false" selected> No</option>';}
-      
-        //preseleziona il lavoratore presente quando si edita in modo da lasciare lo stesso se non modificato
-       if(tickets[no].lavoratore==="Mario"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare">Da Assegnare</option><option value="Mario" selected>Mario</option><option value="Luigi">Luigi</option><option value="Giovanni">Giovanni</option>';}
-        else if(tickets[no].lavoratore=="Luigi"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare">Da Assegnare</option><option value="Mario">Mario</option><option value="Luigi" selected>Luigi</option><option value="Giovanni">Giovanni</option>';}
-        else if(tickets[no].lavoratore=="Giovanni"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare">Da Assegnare</option><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';}
-        else if(tickets[no].lavoratore==""){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare">Da Assegnare</option><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';}
-        else{lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare" selected>Da Assegnare</option><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" >Giovanni</option>';
-       }
+       //var completato=document.getElementById("completato"+no);
+       //var lavoratore=document.getElementById("lavoratore"+no);
+
+        var ore=document.getElementById("ore"+no);
+        var dataSvolto=document.getElementById("dataSvolto"+no);
+        var materialiUsati=document.getElementById("materialiUsati"+no);
+        var commentiIntervento=document.getElementById("commentiIntervento"+no);
+
+        ore.innerHTML='<input type="number" id="oreData'+no+'" size="1" value="'+ore.innerHTML+'"></input>';
+        dataSvolto.innerHTML='<input type="date" id="dataSvoltoData'+no+'" size="3" value="'+dataSvolto.innerHTML+'"></input>';
+        materialiUsati.innerHTML='<textarea type="text" id="materialiUsatiData'+no+'" rows="1" cols="8" value="">'+materialiUsati.innerHTML+'</textarea>';
+        commentiIntervento.innerHTML='<textarea type="text" id="commentiInterventoData'+no+'" rows="1" cols="8" value="" >'+commentiIntervento.innerHTML+'</textarea>';
+        
+        
       }
       
-      function save_row(no)
+      function save_row(indexInterventi, indexTicket)
       { //prendo valori selezionati 
-        var lavoratore_val="";
-        if (document.getElementById("lavoratore_text"+no).value==null){
-          lavoratore_val="Da Assegnare";}
-          else{ lavoratore_val=document.getElementById("lavoratore_text"+no).value;}
-      
-       var completato=document.getElementById("completato"+no);
-      
-      //li ritorno all'array e al dom
-       if(document.getElementById('completato_text'+no).value=="true") {
-            tickets[no].completato=true;
-            completato.innerHTML="Completato: Si";
-            
-          }else {
-            tickets[no].completato=false;
-            completato.innerHTML="Completato: No";
-        }
-      
-       document.getElementById("lavoratore"+no).innerHTML="Lavoratore: "+lavoratore_val;
-       tickets[no].lavoratore=lavoratore_val;
+       var ore=document.getElementById("ore"+indexInterventi);
+       var dataSvolto=document.getElementById("dataSvolto"+indexInterventi);
+       var materialiUsati=document.getElementById("materialiUsati"+indexInterventi);
+       var commentiIntervento=document.getElementById("commentiIntervento"+indexInterventi);
+       
+
+       var oreData = document.getElementById("oreData"+indexInterventi);
+       var dataSvoltoData = document.getElementById("dataSvoltoData"+indexInterventi);
+       var materialiUsatiData = document.getElementById("materialiUsatiData"+indexInterventi);
+       var commentiInterventoData = document.getElementById("commentiInterventoData"+indexInterventi);
+       
+      tickets[indexTicket].interventi[indexInterventi].ore= oreData.value;
+      ore.innerHTML = oreData.value;
+       
+      tickets[indexTicket].interventi[indexInterventi].dataSvolto= dataSvoltoData.value;
+      dataSvolto.innerHTML = dataSvoltoData.value;
+
+      tickets[indexTicket].interventi[indexInterventi].materialiUsati= materialiUsatiData.value;
+      materialiUsati.innerHTML = materialiUsatiData.value;
+
+      tickets[indexTicket].interventi[indexInterventi].commentiIntervento= commentiInterventoData.value;
+      commentiIntervento.innerHTML = commentiInterventoData.value;
+
+
        //salvo modificne in array
        window.localStorage.setItem("tickets", JSON.stringify(tickets));
       
        //faccio tornare il button a "edit" 
-       document.getElementById("bottone"+no).setAttribute( "onClick", "edit_row("+no+");" );
-       document.getElementById("bottone"+no).value= `Edit`;
-       document.getElementById("bottone"+no).innerHTML='<input type="button" id="edit_button'+no+'" value="Edit" class="edit" onclick="edit_row('+no+')"></input>';
+       document.getElementById("bottone"+indexInterventi).setAttribute( "onClick", "edit_row("+indexInterventi+","+indexTicket+");" );
+       document.getElementById("bottone"+indexInterventi).value= `Edit`;
       }
