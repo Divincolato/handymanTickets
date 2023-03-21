@@ -2,47 +2,55 @@
 let tickets = { push: function push(element) { [].push.call(this, element) } };
 //dati preimpostati per metter qualcosa in localStorage
 tickets = [
-      { cliente: "Gigio",
-        tipoIntervento: [{"Edile":5},{"Elettrico":3},{"Idraulico":3},{"Serramenti":3}],
-        descrizioneIntervento: "eretgs est erstg rst sets et",
-        indirizzo:"wudnuwdnuwdn via v 3343",
-        data: "2023-03-17",
-        lavoratore: "Mario",
-        materialiImpiegati: ["cemento", "piastrelle"],
-        completato: true
-      },
-      {cliente: "Gigio",
-        tipoIntervento: [{"Edile":5},{"Elettrico":3}],
-        descrizioneIntervento: "eretgs est erstg rst sets et",
-        indirizzo:"wudnuwdnuwdn via v 3343",
-        data: "2023-03-18",
-        lavoratore: "Luigi",
-        materialiImpiegati: ["cavi", "prese"],
-        completato: false
-      },
-      {cliente: "Gigio",
-        tipoIntervento: [{"Edile":5},{"Elettrico":3}],
-        descrizioneIntervento: "eretgs est erstg rst sets et",
-        indirizzo:"wudnuwdnuwdn via v 3343",
-        data: "2023-03-19",
-        lavoratore: "Mario",
-        materialiImpiegati: ["legno", "chiodi"],
-        completato: false
-      }]
-  ;
+  {
+  nome: "mario",
+  cognome: "rossi",
+  indirizzo: "via iave 9",
+  descrizioneIntervento: "Cambiare infissi",
+  contatti:"333-6658452",
+  interventi:[{
+      categoria:"Pittura", ore: 3, dataSvolto:"", materialiUsati:"",commentiIntervento:""
+    },{
+      categoria:"Falegnameria", ore: 2, dataSvolto:"", materialiUsati:"",commentiIntervento:""
+    },{
+      categoria:"Elettrodomestici", ore: 5, dataSvolto:"", materialiUsati:"",commentiIntervento:""
+    }],
+    lavoratore: "Mario",
+    completato: true
+  },
+  {
+  nome: "mario",
+  cognome: "rossi",
+  indirizzo: "via iave 9",
+  descrizioneIntervento: "Cambiare infissi",
+  contatti:"333-6658452",
+  interventi:[{
+      categoria:"Pittura", ore: 3, dataSvolto:"", materialiUsati:"",commentiIntervento:""
+    },{
+      categoria:"Falegnameria", ore: 2, dataSvolto:"", materialiUsati:"",commentiIntervento:""
+    },{
+      categoria:"Elettrodomestici", ore: 5, dataSvolto:"", materialiUsati:"",commentiIntervento:""
+    }],
+    lavoratore: "Mario",
+    completato: false
+  }
   
+
+]
+
 //elementi del dom 
-  let addNotaButton = document.getElementById("add-nota");
+  let addTicketButton = document.getElementById("add-ticket");
   
   let richiestaForm = document.getElementById("richiesta-form");
 
   let caricaDatiDefault = document.getElementById("caricaDatiDefault");
 
 //eventListeners
-  addNotaButton.addEventListener("click", () => {
-      addNota();
+  addTicketButton.addEventListener("click", () => {
+      addTicket();
     }
   );
+//metodo che carica dei dati di default (usato per localStorage)
   caricaDatiDefault.addEventListener("click", () => {
       window.localStorage.setItem("tickets", JSON.stringify(tickets));
       window.alert("Dati caricati");
@@ -52,49 +60,50 @@ tickets = [
 
 //Funzione addNota() crea una nota vuota, popolandola con i dati inseriti da un cliente 
 //per poi inserirla nei tickets ed inviando a localStorage l'array
-function addNota() {
-  let tmp = {
-        tipoIntervento: [],
-        descrizioneIntervento: "",
-        indirizzo:"",
-        data: "",
-        lavoratore: "",
-        materialiImpiegati: [],
-        completato: false,
-  };
+function addTicket() {
+  let tmp = 
+    {nome: "",
+    cognome: "",
+    indirizzo: "",
+    interventi:[]
+    }
+  ;
   //serie di if per checkbox, popola tipoIntervento
   //TODO rifare con ciclo o HOfunc per non avere mille if
   if(richiestaForm.Edile.checked){
-    tmp.tipoIntervento.push({"Edile":0});
+    tmp.interventi.push({"Edile":0, dataSvolto:"", materialiUsati:"",commentiIntervento:""});
   }
   if(richiestaForm.Elettrico.checked){
-    tmp.tipoIntervento.push({"Elettrico":0});
+    tmp.interventi.push({"Elettrico":0, dataSvolto:"", materialiUsati:"",commentiIntervento:""});
   }
   if(richiestaForm.Falegname.checked){
-    tmp.tipoIntervento.push({"Falegname":0});
+    tmp.interventi.push({"Falegname":0, dataSvolto:"", materialiUsati:"",commentiIntervento:""});
   }
   if(richiestaForm.Idraulico.checked){
-    tmp.tipoIntervento.push({"Idraulico":0});
+    tmp.interventi.push({"Idraulico":0, dataSvolto:"", materialiUsati:"",commentiIntervento:""});
   }
   if(richiestaForm.Serramenti.checked){
-    tmp.tipoIntervento.push({"Serramenti":0});
+    tmp.interventi.push({"Serramenti":0, dataSvolto:"", materialiUsati:"",commentiIntervento:""});
   }
   if(richiestaForm.Tinteggiatura.checked){
-    tmp.tipoIntervento.push({"Tinteggiatura":0});
+    tmp.interventi.push({"Tinteggiatura":0, dataSvolto:"", materialiUsati:"",commentiIntervento:""});
   }
   if(richiestaForm.Facchinaggio.checked){
-    tmp.tipoIntervento.push({"Facchinaggio":0});
+    tmp.interventi.push({"Facchinaggio":0, dataSvolto:"", materialiUsati:"",commentiIntervento:""});
   }
   if(richiestaForm.Altro.checked){
-    tmp.tipoIntervento.push({"Altro":0});
+    tmp.interventi.push({"Altro":0, dataSvolto:"", materialiUsati:"",commentiIntervento:""});
   }
 
   //dati rimanenti inseriti dall'utente
-  tmp.descrizioneIntervento = richiestaForm.descrizioneIntervento.value
+  tmp.descrizioneIntervento = richiestaForm.descrizioneIntervento.value;
 
-  tmp.indirizzo = richiestaForm.Indirizzo.value
+  tmp.indirizzo = richiestaForm.Indirizzo.value;
 
-  tmp.data = richiestaForm.data.value
+  tmp.nome = richiestaForm.nome.value;
+
+  tmp.cognome = richiestaForm.cognome.value;
+  tmp.contatti = richiestaForm.contatti.value;
   //inserimento in tickets locale
   tickets.push(tmp);
   //push allo storage

@@ -1,69 +1,108 @@
 let tickets = { push: function push(element) { [].push.call(this, element) } };
 tickets = JSON.parse(window.localStorage.getItem("tickets"));
 
+//prendo il nome utente salvato in localStorage da login.js
+//idealmente sarebbe tutto da rifare con autenticazione google e sicuramente non in locale
+
 let username = window.localStorage.getItem("username");
-  // Seleziona l'elemento DOM in cui vuoi riempire i dati
-  const ticketList = document.querySelector("#ticket-list");
+// Seleziona l'elemento DOM in cui vuoi riempire i dati
+const ticketList = document.querySelector("#ticket-list");
+//contatore usato per assegnare id diverso dinamicamente ad ogni riga
 let index=0;
-  // Cicla attraverso l'array di ticket e crea una riga della tabella per ogni ticket
-  tickets.forEach((ticket) => {
+
+// Cicla attraverso l'array di ticket e crea una riga della tabella per ogni ticket
+tickets.forEach((ticket) => {
       
     
     // Crea una nuova riga della tabella
-    const tableRow = document.createElement("tr");
-    var ticketDetails="";
-    var tipoInterv = [];
-    var oreImpiegate = [];
+    const tableRow = document.createElement("div");
+    var ticketDetails=`
+    <div class="row">
+    <div class="col-md-2">
+    <ul class="list-group">
+      <li class="list-group-item">Nome</li>
+      <li class="list-group-item">Cognome</li>
+      <li class="list-group-item">Indirizzo</li>
+      <li class="list-group-item">Contatti</li>
+      <li class="list-group-item">Descrizione</li>
+    </ul>
+  </div>
+  <div class="col-md-4">
+  <ul class="list-group">
+    <li class="list-group-item">${ticket.nome}</li>
+    <li class="list-group-item">${ticket.cognome}</li>
+    <li class="list-group-item">${ticket.indirizzo}</li>
+    <li class="list-group-item">${ticket.contatti}</li>
+    <li class="list-group-item">${ticket.descrizioneIntervento}</li>
+  </ul>
+</div>
+		  <div class="col-md-6">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Colonna 1</th>
+            <th>Colonna 2</th>
+            <th>Colonna 3</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Riga 1, colonna 1</td>
+            <td>Riga 1, colonna 2</td>
+            <td>Riga 1, colonna 3</td>
+          </tr>
+          <tr>
+            <td>Riga 2, colonna 1</td>
+            <td>Riga 2, colonna 2</td>
+            <td>Riga 2, colonna 3</td>
+          </tr>
+          </tbody>
+        </table>
+		  </div>
+		</div>`;
 
-    ticket.tipoIntervento.forEach((item) => {
-      let entries = Object.entries(item);
-      tipoInterv.push(entries[0][0]);
-      oreImpiegate.push(entries[0][1]);
-    });
+  /*
     // Aggiungi i dettagli del ticket alla riga della tabella
-       ticketDetails+=`<td id="riga${index}">${ticket.cliente}</td><td id="riga${index}">${ticket.indirizzo}</td>`
-     ticketDetails += `<td id="riga${index}">${tipoInterv.join(", ")}</td>
-      <td id="riga${index}">${oreImpiegate.join(", ")}</td>
-      <td>${ticket.data}</td>
-      <td id="lavoratore${index}">${ticket.lavoratore}</td>
-      <td>${ticket.materialiImpiegati.join(", ")}</td>
-      <td>${ticket.descrizioneIntervento}</td>
-      <td id="completato${index}">${ticket.completato ? "Si" : "No"}</td>
-      <input type="button" id="edit_button${index}" value="Edit" class="edit" onclick="edit_row('${index}')">
-      <input type="button" id="save_button${index}" style="display:none" value="Save" class="save" onclick="save_row('${index}')">
-      
-    `;
-    tableRow.innerHTML = ticketDetails;
+      ticketDetails +=`      <tr>
+      <td >${ticket.nome}</td></tr><tr>
+      <td >${ticket.cognome}</td></tr><tr>
+      <td >${ticket.indirizzo}</td></tr><tr>
+      <td >${ticket.contatti}</td></tr><tr>
+      <td >${ticket.descrizioneIntervento}</td></tr><tr>
+      <td id="lavoratore${index}">${ticket.lavoratore}</td></tr><tr>
+      <td id="completato${index}">${ticket.completato ? "Si" : "No"}</td></tr><tr>
+      <td id="bottone${index}"><input type="button" id="edit_button${index}" value="Edit" class="edit" onclick="edit_row('${index}')"></td>
+      <td ><input type="button" id="save_button${index}" style="display:none" value="Save" class="save" onclick="save_row('${index}')"></td>
+      </tr>
+    `;*/
 
+    tableRow.innerHTML = ticketDetails;
+    console.log(tableRow.innerHTML)
     // Aggiungi la riga della tabella alla lista di ticket
     ticketList.appendChild(tableRow);
     index++;
   }
   );
 
-console.log(tickets);
     function edit_row(no)
 {
- document.getElementById("edit_button"+no).style.display="none";
- document.getElementById("save_button"+no).style.display="block";
-	
+  //cambio il button a "save"
+ document.getElementById("bottone"+no).innerHTML='<input type="button" id="edit_button'+no+'" style="display:block" value="Save" class="save" onclick="save_row('+no+')"></input>';
+
  var completato=document.getElementById("completato"+no);
  var lavoratore=document.getElementById("lavoratore"+no);
 	
- var completato_data=completato.innerHTML;
- var lavoratore_data=lavoratore.innerHTML;
-	
- completato.innerHTML='<input type="radio" id="completato_text_si'+no+'"  value="Si">  <label for="Si">Si</label>  <input type="radio" id="completato_text_no'+no+'"  value="No">  <label for="No">No</label>'
- 
- if(lavoratore.innerHTML=="Mario")
- {lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario" selected>Mario</option><option value="Luigi">Luigi</option><option value="Giovanni">Giovanni</option>';
-}else 
-if(lavoratore.innerHTML=="Luigi")
-{lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi" selected>Luigi</option><option value="Giovanni">Giovanni</option>';
-}else 
-if(lavoratore.innerHTML=="Giovanni"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';
-}else{lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" >Giovanni</option>';
-}
+ if(completato.innerHTML=="Si"){
+  completato.innerHTML='<select class="form-control" id="completato_text'+no+'"><option value="true" selected>Si</option><option value="false"> No</option>';
+ }
+ else{
+  completato.innerHTML='<select class="form-control" id="completato_text'+no+'"><option value="true" >Si</option><option value="false" selected> No</option>';}
+//preseleziona il lavoratore presente quando si edita in modo da lasciare lo stesso se non modificato
+ if(lavoratore.innerHTML=="Mario"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario" selected>Mario</option><option value="Luigi">Luigi</option><option value="Giovanni">Giovanni</option>';}
+  else if(lavoratore.innerHTML=="Luigi"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi" selected>Luigi</option><option value="Giovanni">Giovanni</option>';}
+  else if(lavoratore.innerHTML=="Giovanni"){lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" selected>Giovanni</option>';}
+  else{lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" >Giovanni</option>';
+ }
 }
 
 function save_row(no)
@@ -73,11 +112,13 @@ function save_row(no)
     else{ lavoratore_val=document.getElementById("lavoratore_text"+no).value;}
 
  var completato=document.getElementById("completato"+no);
- if(document.getElementById('completato_text_si'+no).checked) {
+
+
+ if(document.getElementById('completato_text'+no).value=="true") {
       tickets[no].completato=true;
       completato.innerHTML="Si";
       
-    }else if(document.getElementById('completato_text_no'+no).checked) {
+    }else {
       tickets[no].completato=false;
       completato.innerHTML="No";
   }
@@ -87,6 +128,6 @@ function save_row(no)
  
  window.localStorage.setItem("tickets", JSON.stringify(tickets));
 
- document.getElementById("edit_button"+no).style.display="block";
- document.getElementById("save_button"+no).style.display="none";
+ //faccio tornare il button a "edit"
+ document.getElementById("bottone"+no).innerHTML='<input type="button" id="edit_button'+no+'" value="Edit" class="edit" onclick="edit_row('+no+')"></input>';
 }
