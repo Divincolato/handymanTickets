@@ -26,20 +26,36 @@ appId: "1:338544044418:web:062317dbd635242877879b"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-try {
-  const docRef = await addDoc(collection(db, "users"), {
-    first: "Ada",
-    last: "Lovelace",
-    born: 1815
+
+function writeUserData(userId, name, email, imageUrl) {
+  const db = getDatabase();
+  set(ref(db, 'users/' + userId), {
+    username: name,
+    email: email,
+    profile_picture : imageUrl
   });
+}
+/*
+try {
+  const docRef = await addDoc(collection(db, "tickets"), tickets[1]);
   console.log("Document written with ID: ", docRef.id);
 } catch (e) {
   console.error("Error adding document: ", e);
+}*/
+const querySnapshot = await getDocs(collection(db, "tickets"));
+
+let ticket;
+let tickets= [];
+let index= 0;
+export default function foo() {
+  
+querySnapshot.forEach((doc) => {
+  console.log("dentro a call"+index);
+  tickets[index]= doc.data();
+  index++;
+});
+
+return tickets;
 }
 
-const querySnapshot = await getDocs(collection(db, "users"));
-
-querySnapshot.forEach((doc) => {
-  console.log(`${doc.id} => ${doc.data()}`);
-});
-console.log(querySnapshot.data());
+;

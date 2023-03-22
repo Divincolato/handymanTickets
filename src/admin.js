@@ -128,6 +128,7 @@ function save_row(no)
  document.getElementById("bottone"+no).value= `Edit`;
  document.getElementById("bottone"+no).innerHTML='<input type="button" id="edit_button'+no+'" value="Edit" class="edit" onclick="edit_row('+no+')"></input>';
 }
+
 function getTicketCost(ticket) {
   //prendo il prezzo di ogni intervento in un ticket con map chiamando getInterventionPrice() e riduco l'array ritornato per avere il costo totale
   return ticket.interventi.map((intervento) => getInterventionPrice(intervento)).reduce((acc, cur) => acc + cur, 0);

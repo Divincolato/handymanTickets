@@ -1,9 +1,14 @@
+import foo from './file.js';
 
+//let tickets = { push: function push(element) { [].push.call(this, element) } };
 
-let tickets = { push: function push(element) { [].push.call(this, element) } };
-//dati preimpostati per mettere qualcosa in localStorage
+let tickets= foo();
 
-tickets = [
+console.log(tickets);
+
+/*
+let tickets2 = { push: function push(element) { [].push.call(this, element) } };
+tickets2 = [
   {
   nome: "Germano",
   cognome: "Parvetti",
@@ -34,7 +39,8 @@ tickets = [
     categoria:"Falegnameria", ore: 2, dataSvolto:"2023-03-12", materialiUsati:"Legno",commentiIntervento:"Tutto ok"
   },{
     categoria:"Elettrodomestici", ore: 5, dataSvolto:"2022-9-9", materialiUsati:"Microonde",commentiIntervento:"Tutto ok"
-  },{  categoria:"Pittura", ore: 3, dataSvolto:"2023-04-25", materialiUsati:"Pennelli",commentiIntervento:"Tutto ok"
+  },{  
+    categoria:"Pittura", ore: 3, dataSvolto:"2023-04-25", materialiUsati:"Pennelli",commentiIntervento:"Tutto ok"
 },{
   categoria:"Falegnameria", ore: 2, dataSvolto:"2023-03-12", materialiUsati:"Legno",commentiIntervento:"Tutto ok"
 },{
@@ -42,6 +48,8 @@ tickets = [
 }]
   }
 ];
+console.log(tickets2);
+*/
 
 //elementi del dom 
   let addTicketButton = document.getElementById("add-ticket");
