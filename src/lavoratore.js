@@ -1,10 +1,16 @@
-let tickets = { push: function push(element) { [].push.call(this, element) } };
-tickets = JSON.parse(window.localStorage.getItem("tickets"));
 
+import  { add, get, update } from './file.js';
+
+let tickets= get();
+//prendo username salvato in localStorage per vedere quale dipendente è connesso
+//TODO da rifare, sicuramente non con js e non clientside
 let username = window.localStorage.getItem("username");
-  // Seleziona l'elemento DOM in cui vuoi riempire i dati
-  const ticketList = document.querySelector("#ticket-list");
+
+// elemento del DOM dove finiranno i ticket
+const ticketList = document.querySelector("#ticket-list");
+//contatore per id dinamici elementi ticket
 let index=0;
+//contatore per id dinamici interventi in ogni singolo ticket
 let indexInterventi=0;
   // Cicla attraverso l'array di ticket e crea una riga della tabella per ogni ticket
   tickets.forEach((ticket) => {
@@ -40,8 +46,7 @@ let indexInterventi=0;
                 </tr>
                 </thead>
                 <tbody>`;
-        indexInterventi=0;
-
+        //cicla ogni intervento per il singolo ticket
         ticket.interventi.forEach((intervento) =>{
           ticketDetails+= `
           <tr>
@@ -52,6 +57,7 @@ let indexInterventi=0;
           <td id="materialiUsati${indexInterventi}">${intervento.materialiUsati}</td>
           <td id="commentiIntervento${indexInterventi}">${intervento.commentiIntervento}</td>
         </tr>`
+        //aumento contatore per singolo intervento
         indexInterventi++;
         });
       
@@ -66,47 +72,54 @@ let indexInterventi=0;
       
       
           tableRow.innerHTML = ticketDetails;
-          // Aggiungi la riga della tabella alla lista di ticket
+          // Aggiunge la riga della tabella alla lista di ticket
           ticketList.appendChild(tableRow);
           
-        }index++;
+        }
+        //contatore ticket per id dinamici
+        index++;
       });
       
-          function edit_row(no, no2)
+//funzione edit_row, ho dovuto crearla in questo modo perchè lo scope non era più globale essendo admin.js un modulo(per poter fare import)
+window.edit_row = function(indexInterventi, indexTicket)
       {
-        //cambio il button a "save"
-       document.getElementById("bottone"+no).setAttribute( "onClick", "save_row("+no+", "+no2+");" );
-       document.getElementById("bottone"+no).value= `Save`;
+        //cambio il button da "edit" a "save"
+       document.getElementById("bottone"+indexInterventi).setAttribute( "onClick", "save_row("+indexInterventi+", "+indexTicket+");" );
+       document.getElementById("bottone"+indexInterventi).value= `Save`;
         
-       //var completato=document.getElementById("completato"+no);
-       //var lavoratore=document.getElementById("lavoratore"+no);
+  //prendo gli elementi che si vogliono cambiare
+        var ore=document.getElementById("ore"+indexInterventi);
+        var dataSvolto=document.getElementById("dataSvolto"+indexInterventi);
+        var materialiUsati=document.getElementById("materialiUsati"+indexInterventi);
+        var commentiIntervento=document.getElementById("commentiIntervento"+indexInterventi);
 
-        var ore=document.getElementById("ore"+no);
-        var dataSvolto=document.getElementById("dataSvolto"+no);
-        var materialiUsati=document.getElementById("materialiUsati"+no);
-        var commentiIntervento=document.getElementById("commentiIntervento"+no);
+	//prepopolo i menù a tendina con l'opzione che era presente 
+  //così se non modificata l'opzione rimane con lo stesso valore
+  //da rifare ciclando e modificando le properties, non usando una String per ogni cosa
 
-        ore.innerHTML='<input type="number" id="oreData'+no+'" size="1" value="'+ore.innerHTML+'"></input>';
-        dataSvolto.innerHTML='<input type="date" id="dataSvoltoData'+no+'" size="3" value="'+dataSvolto.innerHTML+'"></input>';
-        materialiUsati.innerHTML='<textarea type="text" id="materialiUsatiData'+no+'" rows="1" cols="8" value="">'+materialiUsati.innerHTML+'</textarea>';
-        commentiIntervento.innerHTML='<textarea type="text" id="commentiInterventoData'+no+'" rows="1" cols="8" value="" >'+commentiIntervento.innerHTML+'</textarea>';
+        ore.innerHTML='<input type="number" id="oreData'+indexInterventi+'" size="1" value="'+ore.innerHTML+'"></input>';
+        dataSvolto.innerHTML='<input type="date" id="dataSvoltoData'+indexInterventi+'" size="3" value="'+dataSvolto.innerHTML+'"></input>';
+        materialiUsati.innerHTML='<textarea type="text" id="materialiUsatiData'+indexInterventi+'" rows="1" cols="8" value="">'+materialiUsati.innerHTML+'</textarea>';
+        commentiIntervento.innerHTML='<textarea type="text" id="commentiInterventoData'+indexInterventi+'" rows="1" cols="8" value="" >'+commentiIntervento.innerHTML+'</textarea>';
         
         
       }
       
-      function save_row(indexInterventi, indexTicket)
+//stessa cosa che per edit_row, la funzione non era più nello scope globale
+window.save_row = function(indexInterventi, indexTicket)
       { //prendo valori selezionati 
        var ore=document.getElementById("ore"+indexInterventi);
        var dataSvolto=document.getElementById("dataSvolto"+indexInterventi);
        var materialiUsati=document.getElementById("materialiUsati"+indexInterventi);
        var commentiIntervento=document.getElementById("commentiIntervento"+indexInterventi);
        
-
+        //prendo i dati da loro contenuti
        var oreData = document.getElementById("oreData"+indexInterventi);
        var dataSvoltoData = document.getElementById("dataSvoltoData"+indexInterventi);
        var materialiUsatiData = document.getElementById("materialiUsatiData"+indexInterventi);
        var commentiInterventoData = document.getElementById("commentiInterventoData"+indexInterventi);
        
+       //li inserisco in tickets e li rimetto nel dom
       tickets[indexTicket].interventi[indexInterventi].ore= oreData.value;
       ore.innerHTML = oreData.value;
        
@@ -120,9 +133,9 @@ let indexInterventi=0;
       commentiIntervento.innerHTML = commentiInterventoData.value;
 
 
-       //salvo modificne in array
-       window.localStorage.setItem("tickets", JSON.stringify(tickets));
-      
+      //rimando il ticket a firebase
+      update(tickets[indexTicket]);
+
        //faccio tornare il button a "edit" 
        document.getElementById("bottone"+indexInterventi).setAttribute( "onClick", "edit_row("+indexInterventi+","+indexTicket+");" );
        document.getElementById("bottone"+indexInterventi).value= `Edit`;

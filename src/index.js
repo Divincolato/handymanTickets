@@ -4,56 +4,8 @@ import  { add, get } from './file.js';
 //TODO inserire error check per verificare veramente il submit dei dati
 
 
-//let tickets = { push: function push(element) { [].push.call(this, element) } };
-
 let tickets= get();
 
-console.log(tickets);
-
-/*
-let tickets2 = { push: function push(element) { [].push.call(this, element) } };
-tickets2 = [
-  {
-  nome: "Germano",
-  cognome: "Parvetti",
-  indirizzo: "via Pave 9, Trento(TN)",
-  descrizioneIntervento: "Cambiare infissi",
-  contatti:"333-6658452",
-    lavoratore: "Da Assegnare",
-    completato: true,
-  interventi:[{
-      categoria:"Pittura", ore: 3, dataSvolto:"2023-04-25", materialiUsati:"Pennelli",commentiIntervento:"Tutto ok"
-    },{
-      categoria:"Falegnameria", ore: 2, dataSvolto:"2023-03-12", materialiUsati:"Legno",commentiIntervento:"Tutto ok"
-    },{
-      categoria:"Elettrodomestici", ore: 5, dataSvolto:"2022-9-9", materialiUsati:"Microonde",commentiIntervento:"Tutto ok"
-    }]
-  },
-  {
-  nome: "Paolo",
-  cognome: "Bassi",
-  indirizzo: "via Bettini 29, Rovereto(CA)",
-  descrizioneIntervento: "Pittura soffitti, Cambio prese",
-  contatti:"333-6653432",
-    lavoratore: "Luigi",
-    completato: false,
-  interventi:[{
-    categoria:"Pittura", ore: 3, dataSvolto:"2023-04-25", materialiUsati:"Pennelli",commentiIntervento:"Tutto ok"
-  },{
-    categoria:"Falegnameria", ore: 2, dataSvolto:"2023-03-12", materialiUsati:"Legno",commentiIntervento:"Tutto ok"
-  },{
-    categoria:"Elettrodomestici", ore: 5, dataSvolto:"2022-9-9", materialiUsati:"Microonde",commentiIntervento:"Tutto ok"
-  },{  
-    categoria:"Pittura", ore: 3, dataSvolto:"2023-04-25", materialiUsati:"Pennelli",commentiIntervento:"Tutto ok"
-},{
-  categoria:"Falegnameria", ore: 2, dataSvolto:"2023-03-12", materialiUsati:"Legno",commentiIntervento:"Tutto ok"
-},{
-  categoria:"Elettrodomestici", ore: 5, dataSvolto:"2022-9-9", materialiUsati:"Microonde",commentiIntervento:"Tutto ok"
-}]
-  }
-];
-console.log(tickets2);
-*/
 
 //elementi del dom 
 
@@ -61,7 +13,6 @@ console.log(tickets2);
   
   let richiestaForm = document.getElementById("richiesta-form");
 
-  let caricaDatiDefault = document.getElementById("caricaDatiDefault");
 
 //eventListeners
   addTicketButton.addEventListener("click", () => {
@@ -69,22 +20,9 @@ console.log(tickets2);
     }
   );
 
-//metodo che carica dei dati di default (usato per localStorage)
-  caricaDatiDefault.addEventListener("click", () => {
-    try {
-      window.localStorage.setItem("tickets", JSON.stringify(tickets));
-      window.alert("Dati caricati");
-    } catch (error) {
-      window.alert("Errore nel caricare i dati");
-    }
-      
-      
-      console.log(tickets);
-    }
-  );
 
-//Funzione addNota() crea una nota vuota, popolandola con i dati inseriti da un cliente 
-//per poi inserirla nei tickets ed inviando a localStorage l'array
+//Funzione addTicket() crea un ticket vuoto, popolandolo con i dati inseriti da un cliente 
+//per poi inserirla nei tickets ed inviando a firebase il ticket
 function addTicket() {
   let tmp = 
     {nome: "",
@@ -129,10 +67,7 @@ function addTicket() {
   tmp.nome = richiestaForm.nome.value;
   tmp.cognome = richiestaForm.cognome.value;
   tmp.contatti = richiestaForm.contatti.value;
-  //inserimento in tickets locale
-  tickets.push(tmp);
-  //push allo storage
+  //chiamata a metodo add di firebase
   add(tmp);
-  window.localStorage.setItem("tickets", JSON.stringify(tickets));
 }
 

@@ -1,12 +1,12 @@
-let tickets = { push: function push(element) { [].push.call(this, element) } };
-tickets = JSON.parse(window.localStorage.getItem("tickets"));
 
-//prendo il nome utente salvato in localStorage da login.js
-//idealmente sarebbe tutto da rifare con autenticazione google e sicuramente non in locale
+import  { add, get, update } from './file.js';
+//chiamata a get() in file.js, metodo che carica i tickets da firebase
+//idealmente bisognerebbe implementare meglio la funzione facendola asincrona
+let tickets= get();
 
-let username = window.localStorage.getItem("username");
-// Seleziona l'elemento DOM in cui vuoi riempire i dati
+// Elemento dove verranno messi i ticket creati nel DOM
 const ticketList = document.querySelector("#ticket-list");
+
 //contatore usato per assegnare id diverso dinamicamente ad ogni riga
 let index=0;
 
@@ -16,34 +16,35 @@ tickets.forEach((ticket) => {
     
     // Crea una nuova riga della tabella
     const tableRow = document.createElement("div");
+    //var ticketDetails conterrà l'innerHtml di una "card" ticket
     var ticketDetails=`
     <div class="row" style="border-style: solid; ">
-  <div class="col-md-3"style="padding:15px">
-  <ul class="list-group">
-    <li class="list-group-item">Nome: ${ticket.nome} ${ticket.cognome}</li>
-    <li class="list-group-item">Indirizzo: ${ticket.indirizzo}</li>
-    <li class="list-group-item">Contatti: ${ticket.contatti}</li>
-    <input style="border-style: solid;" type="button" id="bottone${index}" value="Edit"  onclick="edit_row('${index}')"></input>
-    <li class="list-group-item" id="completato${index}">Completato: ${ticket.completato ? "Si" : "No"}</li>
-    <li class="list-group-item"id="lavoratore${index}">Lavoratore: ${ticket.lavoratore}</li>
-    <li class="list-group-item"id="costoTotale${index}">Costo Totale: ${getTicketCost(ticket)} $ </li>
+      <div class="col-md-3"style="padding:15px">
+        <ul class="list-group">
+          <li class="list-group-item">Nome: ${ticket.nome} ${ticket.cognome}</li>
+          <li class="list-group-item">Indirizzo: ${ticket.indirizzo}</li>
+          <li class="list-group-item">Contatti: ${ticket.contatti}</li>
+          <input style="border-style: solid;" type="button" id="bottone${index}" value="Edit"  onclick="edit_row('${index}')"></input>
+          <li class="list-group-item" id="completato${index}">Completato: ${ticket.completato ? "Si" : "No"}</li>
+          <li class="list-group-item"id="lavoratore${index}">Lavoratore: ${ticket.lavoratore}</li>
+          <li class="list-group-item"id="costoTotale${index}">Costo Totale: ${getTicketCost(ticket)} $ </li>
     
-    </ul>
-</div>
+        </ul>
+    </div>
 		  <div class="col-md-9"style="padding:15px">
         <table class="table">
           <thead>
-          <tr>
-            <th>Categoria</th>
-            <th>Ore</th>
-            <th>Costo</th>
-            <th>Data Svolto</th>
-            <th>Materiali Usati</th>
-            <th>Commenti Dipendente</th>
-          </tr>
+            <tr>
+              <th>Categoria</th>
+              <th>Ore</th>
+              <th>Costo</th>
+              <th>Data Svolto</th>
+              <th>Materiali Usati</th>
+              <th>Commenti Dipendente</th>
+            </tr>
           </thead>
           <tbody>`;
-
+  //ciclo innestato che processa ogni intervento appartenente al singolo ticket
   ticket.interventi.forEach((intervento) =>{
     
     ticketDetails+= `
@@ -69,21 +70,25 @@ tickets.forEach((ticket) => {
 
 
     tableRow.innerHTML = ticketDetails;
-    // Aggiungi la riga della tabella alla lista di ticket
+    // Aggiungi la riga della tabella alla lista di ticket sul DOM
     ticketList.appendChild(tableRow);
+    //aumento contatore per id dinamici
     index++;
   }
   );
 
-    function edit_row(no)
+  //funzione edit_row, ho dovuto crearla in questo modo perchè lo scope non era più globale essendo admin.js un modulo(per poter fare import)
+    window.edit_row = function(no)
 {
-  //cambio il button a "save"
+  //cambio il button da "edit" a "save"
  document.getElementById("bottone"+no).setAttribute( "onClick", "save_row("+no+");" );
  document.getElementById("bottone"+no).value= `Save`;
-
+  //prendo gli elementi che si vogliono cambiare
  var completato=document.getElementById("completato"+no);
  var lavoratore=document.getElementById("lavoratore"+no);
-	
+	//prepopolo i menù a tendina con l'opzione che era presente 
+  //così se non modificata l'opzione rimane con lo stesso valore
+  //da rifare ciclando e modificando le properties, non usando una String per ogni cosa
  if(completato.innerHTML=="Completato: Si"){
   completato.innerHTML='<select class="form-control" id="completato_text'+no+'"><option value="true" selected>Si</option><option value="false"> No</option>';
  }
@@ -98,9 +103,10 @@ tickets.forEach((ticket) => {
   else{lavoratore.innerHTML='<select class="form-control" id="lavoratore_text'+no+'"><option value="Da Assegnare" selected>Da Assegnare</option><option value="Mario">Mario</option><option value="Luigi">Luigi</option><option value="Giovanni" >Giovanni</option>';
  }
 }
-
-function save_row(no)
-{ //prendo valori selezionati 
+//stessa cosa che per edit_row, la funzione non era più nello scope globale
+window.save_row = function(no)
+{ 
+  //prendo valori selezionati 
   var lavoratore_val="";
   if (document.getElementById("lavoratore_text"+no).value==null){
     lavoratore_val="Da Assegnare";}
@@ -120,8 +126,9 @@ function save_row(no)
 
  document.getElementById("lavoratore"+no).innerHTML="Lavoratore: "+lavoratore_val;
  tickets[no].lavoratore=lavoratore_val;
- //salvo modificne in array
- window.localStorage.setItem("tickets", JSON.stringify(tickets));
+ //mando array modificato a firebase
+
+ update(tickets[no]);
 
  //faccio tornare il button a "edit" 
  document.getElementById("bottone"+no).setAttribute( "onClick", "edit_row("+no+");" );
@@ -129,18 +136,18 @@ function save_row(no)
  document.getElementById("bottone"+no).innerHTML='<input type="button" id="edit_button'+no+'" value="Edit" class="edit" onclick="edit_row('+no+')"></input>';
 }
 
+//prendo il prezzo di ogni intervento in un ticket con map chiamando getInterventionPrice() e riduco l'array ritornato per avere il costo totale
 function getTicketCost(ticket) {
-  //prendo il prezzo di ogni intervento in un ticket con map chiamando getInterventionPrice() e riduco l'array ritornato per avere il costo totale
+  
   return ticket.interventi.map((intervento) => getInterventionPrice(intervento)).reduce((acc, cur) => acc + cur, 0);
 }
-// Calculate cost of interventions
 
+//calcolo costo intervento singolo, utilizzato anche da getTicketCost
 function getInterventionPrice(intervento)  {
-  const handymanServiceCall = 250; // includes first two hours + service call
-  const additionalTime = 55; // per half hour
-  const interiorPainting = 90; // per hour
+  const handymanServiceCall = 250; // prime due ore+service call
+  const additionalTime = 55; // ogni mezzora
+  const interiorPainting = 90; // all'ora
   let cost=0;
-  // Calculate cost of each intervento
   
     let rate;
     if(intervento.categoria=="Pittura"){rate=interiorPainting;}
