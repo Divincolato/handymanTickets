@@ -1,8 +1,12 @@
-import foo from './file.js';
+
+import  { add, get } from './file.js';
+  //funzione che non fa fare il submit alla form, da anche l'alert
+//TODO inserire error check per verificare veramente il submit dei dati
+
 
 //let tickets = { push: function push(element) { [].push.call(this, element) } };
 
-let tickets= foo();
+let tickets= get();
 
 console.log(tickets);
 
@@ -52,6 +56,7 @@ console.log(tickets2);
 */
 
 //elementi del dom 
+
   let addTicketButton = document.getElementById("add-ticket");
   
   let richiestaForm = document.getElementById("richiesta-form");
@@ -63,6 +68,7 @@ console.log(tickets2);
       addTicket();
     }
   );
+
 //metodo che carica dei dati di default (usato per localStorage)
   caricaDatiDefault.addEventListener("click", () => {
     try {
@@ -126,13 +132,7 @@ function addTicket() {
   //inserimento in tickets locale
   tickets.push(tmp);
   //push allo storage
+  add(tmp);
   window.localStorage.setItem("tickets", JSON.stringify(tickets));
 }
 
-//funzione che non fa fare il submit alla form, da anche l'alert
-//TODO inserire error check per verificare veramente il submit dei dati
-function mySubmitFunction(e) {
-    e.preventDefault();
-    window.alert("Richiesta Inoltrata, verrai contattato il prima possibile.")
-    return false;
-  }

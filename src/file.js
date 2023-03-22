@@ -27,14 +27,18 @@ appId: "1:338544044418:web:062317dbd635242877879b"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-function writeUserData(userId, name, email, imageUrl) {
-  const db = getDatabase();
-  set(ref(db, 'users/' + userId), {
-    username: name,
-    email: email,
-    profile_picture : imageUrl
-  });
-}
+const dbRef = collection(db, "tickets");
+
+export function add(ticket){
+addDoc(dbRef, ticket)
+.then(docRef => {
+    console.log("Document has been added successfully");
+    window.alert("Document has been added successfully");
+})
+.catch(error => {
+    console.log(error);
+    window.alert("Errore nell'aggiungere la richiesta");
+})};
 /*
 try {
   const docRef = await addDoc(collection(db, "tickets"), tickets[1]);
@@ -47,7 +51,7 @@ const querySnapshot = await getDocs(collection(db, "tickets"));
 let ticket;
 let tickets= [];
 let index= 0;
-export default function foo() {
+export function get() {
   
 querySnapshot.forEach((doc) => {
   console.log("dentro a call"+index);
