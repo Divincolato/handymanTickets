@@ -1,4 +1,5 @@
 
+
 let tickets = { push: function push(element) { [].push.call(this, element) } };
 //dati preimpostati per mettere qualcosa in localStorage
 
