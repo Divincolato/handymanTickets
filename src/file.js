@@ -1,12 +1,10 @@
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js'
 			  
-// If you enabled Analytics in your project, add the Firebase SDK for Google Analytics
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-analytics.js'
-
 // Add Firebase products that you want to use
 import { getAuth } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js'
-import { getFirestore, addDoc, collection} from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js'
+import { getFirestore, addDoc, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js'
+import { ref, getDatabase, set } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js'
 const firebaseConfig = {
 
 apiKey: "AIzaSyDoaW1EppKyx4zXTsIAN5Lr32mulHISbzM",
@@ -14,7 +12,7 @@ apiKey: "AIzaSyDoaW1EppKyx4zXTsIAN5Lr32mulHISbzM",
 authDomain: "handymantickets-15266.firebaseapp.com",
 
 projectId: "handymantickets-15266",
-
+databaseURL: "https://handymantickets-15266-default-rtdb.firebaseio.com",
 storageBucket: "handymantickets-15266.appspot.com",
 
 messagingSenderId: "338544044418",
@@ -38,3 +36,10 @@ try {
 } catch (e) {
   console.error("Error adding document: ", e);
 }
+
+const querySnapshot = await getDocs(collection(db, "users"));
+
+querySnapshot.forEach((doc) => {
+  console.log(`${doc.id} => ${doc.data()}`);
+});
+console.log(querySnapshot.data());
