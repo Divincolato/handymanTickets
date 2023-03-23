@@ -1,11 +1,11 @@
 
-import  { add, get } from './file.js';
+import  { add, get } from 'https://divincolato.github.io/src/file.js';
   //funzione che non fa fare il submit alla form, da anche l'alert
 //TODO inserire error check per verificare veramente il submit dei dati
 
 
 let tickets= get();
-
+ 
 
 //elementi del dom 
 
@@ -34,6 +34,7 @@ function addTicket() {
     cognome: "",
     indirizzo: "",
     lavoratore: "Da Assegnare",
+    dataSubmit: new Date(),
     completato: false,
     interventi:[]
     }

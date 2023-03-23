@@ -1,9 +1,31 @@
+import  { get, update, logOut } from 'https://divincolato.github.io/src/file.js';
 
-import  { get, update, logOut } from './file.js';
 //chiamata a get() in file.js, metodo che carica i tickets da firebase
 //idealmente bisognerebbe implementare meglio la funzione facendola asincrona
 let tickets= get();
+//fix dell'ultimo minuto per avere i tickets in ordine di data e ora, bisognerebbe implementare un metodo per permettere all'utente di ordinarli come vuole
+bubbleSort(tickets);
+function bubbleSort(arr){
 
+  //Outer pass
+  for(let i = 0; i < arr.length; i++){
+
+      //Inner pass
+      for(let j = 0; j < arr.length - i - 1; j++){
+
+          //Value comparison using ascending order
+
+          if(arr[j + 1].dataSubmit > arr[j].dataSubmit){
+
+              //Swapping
+              [arr[j + 1],arr[j]] = [arr[j],arr[j + 1]]
+          }
+      }
+  };
+  return arr;
+};
+
+console.log(tickets)
 // Elemento dove verranno messi i ticket creati nel DOM
 const ticketList = document.querySelector("#ticket-list");
 
@@ -11,9 +33,8 @@ const ticketList = document.querySelector("#ticket-list");
 let index=0;
 
 // Cicla attraverso l'array di ticket e crea una riga della tabella per ogni ticket
-tickets.forEach((ticket) => {
+tickets.forEach((ticket) => { 
       
-    
     // Crea una nuova riga della tabella
     const tableRow = document.createElement("div");
     //var ticketDetails conterrà l'innerHtml di una "card" ticket
@@ -32,7 +53,7 @@ tickets.forEach((ticket) => {
         </ul>
     </div>
 		  <div class="col-md-9"style="padding:15px">
-        <table class="table">
+        <table >
           <thead>
             <tr>
               <th>Categoria</th>
@@ -57,13 +78,18 @@ tickets.forEach((ticket) => {
     <td>${intervento.commentiIntervento}</td>
     
   </tr>`
+  
   });
 
+  let dataSubmitTmp = new Date(ticket.dataSubmit.seconds*1000);
+
+    
   ticketDetails+=`
           
           </tbody>
         </table> <div>
-        <p class="list-group-item">Descrizione cliente: ${ticket.descrizioneIntervento}</p></div> 
+        <p class="list-group-item">Descrizione cliente: ${ticket.descrizioneIntervento}</p>
+        <p class="list-group-item">Data richiesta: ${dataSubmitTmp.toLocaleString()}</p></div> 
 		  </div>
 		</div><br>`;
 

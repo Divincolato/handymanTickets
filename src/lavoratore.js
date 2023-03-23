@@ -1,7 +1,28 @@
-
-import  { get, update, logOut } from './file.js';
+import  { get, update, logOut } from 'https://divincolato.github.io/src/file.js';
 
 let tickets= get();
+//fix dell'ultimo minuto per avere i tickets in ordine di data e ora, bisognerebbe implementare un metodo per permettere all'utente di ordinarli come vuole
+bubbleSort(tickets);
+function bubbleSort(arr){
+
+  //Outer pass
+  for(let i = 0; i < arr.length; i++){
+
+      //Inner pass
+      for(let j = 0; j < arr.length - i - 1; j++){
+
+          //Value comparison using ascending order
+
+          if(arr[j + 1].dataSubmit > arr[j].dataSubmit){
+
+              //Swapping
+              [arr[j + 1],arr[j]] = [arr[j],arr[j + 1]]
+          }
+      }
+  };
+  return arr;
+};
+
 //prendo username salvato in localStorage per vedere quale dipendente è connesso
 //TODO da rifare, sicuramente non con js e non clientside
 let email = window.localStorage.getItem("email");
@@ -13,7 +34,6 @@ let email = window.localStorage.getItem("email");
 
 let str= email.split('@', 1).join();
 let username = str.charAt(0).toUpperCase() + str.slice(1);
-console.log(username);
 
 // elemento del DOM dove finiranno i ticket
 const ticketList = document.querySelector("#ticket-list");
@@ -23,7 +43,7 @@ let index=0;
 let indexInterventi=0;
   // Cicla attraverso l'array di ticket e crea una riga della tabella per ogni ticket
   tickets.forEach((ticket) => {
-    if (username == ticket.lavoratore||username == "admin@handyman.com"){
+    if (username == ticket.lavoratore||username == "admin@handyman.com"){ 
        
       
             
@@ -44,7 +64,7 @@ let indexInterventi=0;
           </ul>
       </div>
             <div class="col-md-9"style="padding:15px">
-              <table class="table">
+              <table >
                 <thead>
                 <tr>
                   <th>Categoria</th><th></th>
@@ -70,11 +90,14 @@ let indexInterventi=0;
         indexInterventi++;
         });
       
+  let dataSubmitTmp = new Date(ticket.dataSubmit.seconds*1000);
+
         ticketDetails+=`
                 
                 </tbody>
               </table> <div>
-              <p class="list-group-item">Descrizione cliente: ${ticket.descrizioneIntervento}</p></div> 
+              <p class="list-group-item">Descrizione cliente: ${ticket.descrizioneIntervento}</p>
+              <p class="list-group-item">Data richiesta: ${dataSubmitTmp.toLocaleString()}</p> </div> 
             </div>
           </div><br>`;
       
@@ -108,8 +131,8 @@ window.edit_row = function(indexInterventi, indexTicket)
 
         ore.innerHTML='<input type="number" id="oreData'+indexInterventi+'" size="1" value="'+ore.innerHTML+'"></input>';
         dataSvolto.innerHTML='<input type="date" id="dataSvoltoData'+indexInterventi+'" size="3" value="'+dataSvolto.innerHTML+'"></input>';
-        materialiUsati.innerHTML='<textarea type="text" id="materialiUsatiData'+indexInterventi+'" rows="1" cols="8" value="">'+materialiUsati.innerHTML+'</textarea>';
-        commentiIntervento.innerHTML='<textarea type="text" id="commentiInterventoData'+indexInterventi+'" rows="1" cols="8" value="" >'+commentiIntervento.innerHTML+'</textarea>';
+        materialiUsati.innerHTML='<textarea type="text" id="materialiUsatiData'+indexInterventi+'" rows="1" cols="15" value="" style="height:42px">'+materialiUsati.innerHTML+'</textarea>';
+        commentiIntervento.innerHTML='<textarea type="text" id="commentiInterventoData'+indexInterventi+'" rows="1" cols="15" value="" style="height:42px">'+commentiIntervento.innerHTML+'</textarea>';
         
         
       }
@@ -149,6 +172,7 @@ window.save_row = function(indexInterventi, indexTicket)
        document.getElementById("bottone"+indexInterventi).setAttribute( "onClick", "edit_row("+indexInterventi+","+indexTicket+");" );
        document.getElementById("bottone"+indexInterventi).value= `Edit`;
       }
+      
       window.logOut = function(){ 
         console.log("a");
         logOut();}
