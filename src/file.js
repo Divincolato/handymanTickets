@@ -32,29 +32,26 @@ export function add(ticket){
 addDoc(dbRef, ticket)
 .then(docRef => {
   let data= {id: docRef.id};  
-  console.log(docRef.id)
   let docRef2 = doc(db, "tickets", docRef.id);
   
   //aggiungo il docId univoco del ticket al ticket stesso così da poterlo richiamare singolarmente e modificare
   //senza dover scaricare ogni volta tutta la collection
   updateDoc(docRef2, data)
   .then(docRef3 => {
-      console.log("A New Document Field has been added to an existing document");
   })
   .catch(error => {
       console.log(error);
   }) 
-        window.alert("Document has been added successfully"+docRef.id);
+        window.alert("La tua richiesta è stata inoltrata con successo, verrai contattato il prima possibile");
 })
 .catch(error => {
     console.log(error);
-    window.alert("Errore nell'aggiungere la richiesta");
+    window.alert("Errore nell'aggiungere la richiesta, riprova");
 })};
 //funzione usata per modificare un ticket quando paul o i dipendenti agiscono sui ticket
 export function update(ticket){
   const ticketRef = doc(db, 'tickets', ticket.id);
   updateDoc(ticketRef, ticket).then(docRef => {
-    console.log("A New Document Field has been added to an existing document");
 })
 .catch(error => {
     console.log(error);
@@ -69,7 +66,6 @@ let index= 0;
 export function get() {
   
 querySnapshot.forEach((doc) => {
-  console.log("dentro a call"+index);
   tickets[index]= doc.data();
   index++;
 });
