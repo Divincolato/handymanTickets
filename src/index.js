@@ -39,7 +39,7 @@ function addTicket() {
     }
   ;
   //serie di if per checkbox, popola tipoIntervento
-  //TODO rifare con ciclo o HOfunc per non avere mille if
+  //TODO rifare con ciclo for e id dinamici per non avere mille if
   if(richiestaForm.Edile.checked){
     tmp.interventi.push({categoria:"Edile", ore: 0, dataSvolto:"", materialiUsati:"",commentiIntervento:""});
   }
