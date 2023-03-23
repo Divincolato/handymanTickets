@@ -1,10 +1,19 @@
 
-import  { add, get, update } from './file.js';
+import  { get, update, logOut } from './file.js';
 
 let tickets= get();
 //prendo username salvato in localStorage per vedere quale dipendente è connesso
 //TODO da rifare, sicuramente non con js e non clientside
-let username = window.localStorage.getItem("username");
+let email = window.localStorage.getItem("email");
+
+//cosa poco bella per formattare il nome utente a ciò che è stato utilizzato nel resto dell'applicazione
+//ci fossero stati dei dati centralizzati si poteva cambiare solo una variabile
+//idealmente si dovrebbe sviluppare meglio per poter aggiungere nuovi assunti/togliere licenziati
+//sicuramente non è da fare hardcoded 
+
+let str= email.split('@', 1).join();
+let username = str.charAt(0).toUpperCase() + str.slice(1);
+console.log(username);
 
 // elemento del DOM dove finiranno i ticket
 const ticketList = document.querySelector("#ticket-list");
@@ -14,7 +23,7 @@ let index=0;
 let indexInterventi=0;
   // Cicla attraverso l'array di ticket e crea una riga della tabella per ogni ticket
   tickets.forEach((ticket) => {
-    if (username == ticket.lavoratore||username == "admin"){
+    if (username == ticket.lavoratore||username == "admin@handyman.com"){
        
       
             
@@ -140,3 +149,7 @@ window.save_row = function(indexInterventi, indexTicket)
        document.getElementById("bottone"+indexInterventi).setAttribute( "onClick", "edit_row("+indexInterventi+","+indexTicket+");" );
        document.getElementById("bottone"+indexInterventi).value= `Edit`;
       }
+      window.logOut = function(){ 
+        console.log("a");
+        logOut();}
+      

@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js'
 import { getFirestore, addDoc, collection, getDocs, updateDoc, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js'
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
 
 const firebaseConfig = {
 
@@ -26,21 +26,44 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const dbRef = collection(db, "tickets");
 const auth = getAuth(app);
+export const user = null;
 
-export function signin(auth, email, password){
+
+
+  
+export function logIn(email, password){
   
   signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in 
     const user = userCredential.user;
-    // ...
+    // se l'utente è l'admin mando alla sua pagina, altrimenti mando a lavoratore
+    // sarebbe da fare utilizzando permessi di firestore e bloccando le pagine in modo che un utente non loggato 
+    //non possa scrivere l'indirizzo della pagina ed accedere comunque
+    window.localStorage.setItem("email", user.email);
+    window.location.href = (user.email === 'admin@handyman.com') ? './admin.html' : './lavoratore.html';
   })
   .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
+    console.log(error.message)
+    window.alert("Errore nell'effettuare il login: "+error.message);
   });
 }
+export function logOut(){
 
+  signOut(auth).then(() => {
+  // Sign-out successful. 
+  window.alert("Logout effettuato. Verrai reindirizzato alla pagina iniziale");
+  window.location.href = ("./index.html");
+  return;
+}).catch((error) => {
+  // An error happened.
+    const errorMessage = error.message;
+    console.log(error.message)
+    window.alert("Errore nell'effettuare il logout: "+error.message);
+});}
+;
 //funzione che aggiunge un ticket a firestore, 
 export function add(ticket){
 addDoc(dbRef, ticket)

@@ -1,5 +1,5 @@
 
-import  { add, get, update } from './file.js';
+import  { get, update, logOut } from './file.js';
 //chiamata a get() in file.js, metodo che carica i tickets da firebase
 //idealmente bisognerebbe implementare meglio la funzione facendola asincrona
 let tickets= get();
@@ -163,3 +163,6 @@ function getInterventionPrice(intervento)  {
 }
 
 
+window.logOut = function(){ 
+  console.log("a");
+  logOut();}
