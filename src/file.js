@@ -1,5 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js'
 import { getFirestore, addDoc, collection, getDocs, updateDoc, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js'
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
 
 const firebaseConfig = {
 
@@ -21,10 +22,24 @@ const firebaseConfig = {
 
  
 // Initialize Firebase
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const dbRef = collection(db, "tickets");
+const auth = getAuth(app);
+
+export function signin(auth, email, password){
+  
+  signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+}
 
 //funzione che aggiunge un ticket a firestore, 
 export function add(ticket){
