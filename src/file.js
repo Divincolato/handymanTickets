@@ -1,30 +1,29 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js'
-			  
-// Add Firebase products that you want to use
 import { getFirestore, addDoc, collection, getDocs, updateDoc, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js'
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyDoaW1EppKyx4zXTsIAN5Lr32mulHISbzM",
+  apiKey: "AIzaSyDoaW1EppKyx4zXTsIAN5Lr32mulHISbzM",
 
-authDomain: "handymantickets-15266.firebaseapp.com",
+  authDomain: "handymantickets-15266.firebaseapp.com",
 
-projectId: "handymantickets-15266",
-databaseURL: "https://handymantickets-15266-default-rtdb.firebaseio.com",
-storageBucket: "handymantickets-15266.appspot.com",
+  projectId: "handymantickets-15266",
 
-messagingSenderId: "338544044418",
+  databaseURL: "https://handymantickets-15266-default-rtdb.firebaseio.com",
 
-appId: "1:338544044418:web:062317dbd635242877879b"
+  storageBucket: "handymantickets-15266.appspot.com",
+
+  messagingSenderId: "338544044418",
+
+  appId: "1:338544044418:web:062317dbd635242877879b"
 
 };
 
-
+ 
 // Initialize Firebase
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 const dbRef = collection(db, "tickets");
 
 //funzione che aggiunge un ticket a firestore, 
@@ -52,9 +51,9 @@ addDoc(dbRef, ticket)
 export function update(ticket){
   const ticketRef = doc(db, 'tickets', ticket.id);
   updateDoc(ticketRef, ticket).then(docRef => {
-})
-.catch(error => {
-    console.log(error);
+  })
+  .catch(error => {
+      console.log(error);
 })}
 //get della collection asincrono
 const querySnapshot = await getDocs(collection(db, "tickets"));
@@ -73,4 +72,4 @@ querySnapshot.forEach((doc) => {
 return tickets;
 }
 
-;
+
