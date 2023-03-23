@@ -16,7 +16,12 @@ let tickets= get();
 
 //eventListeners
   addTicketButton.addEventListener("click", () => {
+    //se la form non è valida faccio il return
+    if(!richiestaForm.reportValidity()){return;}
+      else{
+        //se la form è valida invio il ticket a firestore e resetto la form
       addTicket();
+      richiestaForm.reset();}
     }
   );
 
