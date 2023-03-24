@@ -19,7 +19,12 @@ window.localStorage.setItem("tickets", JSON.stringify(tickets));
   );
 //metodo che carica dei dati di default (usato per localStorage)
   caricaDatiDefault.addEventListener("click", () => {
-    try {tickets = [
+    try {
+      tickets = JSON.parse(window.localStorage.getItem("tickets"));
+      
+    } catch (error) {
+      window.alert("Errore nel caricare i dati");
+      tickets = [
       {
       nome: "Germano",
       cognome: "Parvetti",
@@ -60,8 +65,6 @@ window.localStorage.setItem("tickets", JSON.stringify(tickets));
     ];
       window.localStorage.setItem("tickets", JSON.stringify(tickets));
       window.alert("Dati caricati");
-    } catch (error) {
-      window.alert("Errore nel caricare i dati");
     }
       
       
