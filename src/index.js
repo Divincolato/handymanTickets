@@ -72,6 +72,7 @@ window.localStorage.setItem("tickets", JSON.stringify(tickets));
 //Funzione addNota() crea una nota vuota, popolandola con i dati inseriti da un cliente 
 //per poi inserirla nei tickets ed inviando a localStorage l'array
 function addTicket() {
+  tickets = JSON.parse(window.localStorage.getItem("tickets"));
   let tmp = 
     {nome: "",
     cognome: "",
